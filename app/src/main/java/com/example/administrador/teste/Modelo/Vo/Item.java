@@ -26,6 +26,14 @@ public class Item {
         this.saldo = saldo;
     }
 
+    public Item(Long id, Long idCategoria, String descricao, Double valor, Double saldo) {
+        this.id = id;
+        this.idCategoria = idCategoria;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.saldo = saldo;
+    }
+
     public Long getId() {
         return id;
     }

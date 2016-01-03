@@ -5,6 +5,10 @@
  */
 package com.example.administrador.teste.Modelo.Dao;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.example.administrador.teste.Modelo.Vo.Item;
 
 import java.util.ArrayList;
@@ -14,16 +18,66 @@ import java.util.ArrayList;
  * @author Administrador
  */
 public class ItemDao {
-    public void insere(Item item){
-        
+    private SQLiteDatabase db;
+
+    public ItemDao(SQLiteDatabase db) {
+        this.db = db;
     }
+
+    public void insere(Item item) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put("idCategoria", item.getIdCategoria());
+        contentValues.put("descricao", item.getDescricao());
+        contentValues.put("valor", item.getValor());
+        contentValues.put("saldo", item.getSaldo());
+
+        db.insert("Item", "Id", contentValues);
+    }
+
     public void altera(Item item){
-        
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put("idCategoria", item.getIdCategoria());
+        contentValues.put("descricao", item.getDescricao());
+        contentValues.put("valor", item.getValor());
+        contentValues.put("saldo", item.getSaldo());
+
+        db.update("Item", contentValues, "id = " + item.getId(), null);
     }
     public void exclui(Long id){
-        
+        db.delete("Item", "id = " + id, null);
     }
+
     public ArrayList<Item> getTodos(){
-        return null;
+        String sql = "SELECT * FROM Item";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        ArrayList<Item> list = new ArrayList<Item>();
+        while (cursor.moveToNext()) {
+            list.add(new Item(cursor.getLong(0),
+                    cursor.getLong(1),
+                    cursor.getString(2),
+                    cursor.getDouble(3),
+                    cursor.getDouble(4)));
+        }
+
+        return list;
+    }
+
+    public ArrayList<Item> getTodosPorCategoria(Long idCategoria) {
+        String sql = "SELECT * FROM Item\n" +
+                "WHERE idCategoria = " + idCategoria;
+        Cursor cursor = db.rawQuery(sql, null);
+
+        ArrayList<Item> list = new ArrayList<Item>();
+        while (cursor.moveToNext()) {
+            list.add(new Item(cursor.getLong(0),
+                    cursor.getLong(1),
+                    cursor.getString(2),
+                    cursor.getDouble(3),
+                    cursor.getDouble(4)));
+        }
+        return list;
     }
 }

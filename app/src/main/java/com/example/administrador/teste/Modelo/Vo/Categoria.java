@@ -12,6 +12,7 @@ package com.example.administrador.teste.Modelo.Vo;
 public class Categoria {
     private Long id;
     private String descricao;
+    private Double saldo;
 
     public Categoria() {
     }
@@ -19,7 +20,13 @@ public class Categoria {
     public Categoria(String descricao) {
         this.descricao = descricao;
     }
-    
+
+    public Categoria(String descricao, Long id, Double saldo) {
+        this.descricao = descricao;
+        this.id = id;
+        this.saldo = saldo;
+    }
+
     public Long getId() {
         return id;
     }
@@ -35,6 +42,12 @@ public class Categoria {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
-    
+
+    public Double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(Double saldo) {
+        this.saldo = saldo;
+    }
 }
