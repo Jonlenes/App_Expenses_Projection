@@ -8,13 +8,12 @@ package com.example.administrador.teste.Modelo.Dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import com.example.administrador.teste.Modelo.Bo.DbHelper;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
-import com.example.administrador.teste.Modelo.Vo.Item;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -23,8 +22,8 @@ import java.util.Map;
 public class CategoriaDao {
     private SQLiteDatabase db;
 
-    public CategoriaDao(SQLiteDatabase db) {
-        this.db = db;
+    public CategoriaDao() {
+        this.db = DbHelper.getInstance().getWritableDatabase();
     }
 
     public void insere(Categoria categoria){
@@ -32,6 +31,9 @@ public class CategoriaDao {
 
         contentValues.put("descricao", categoria.getDescricao());
         db.insert("Categoria", "Id", contentValues);
+
+        Log.i("Teste", "Isso foi inserido: " + categoria.getDescricao());
+        //Toast.makeText(, "Entrou no onclick", Toast.LENGTH_LONG).show();
     }
     public void altera(Categoria categoria){
         ContentValues contentValues = new ContentValues();
@@ -44,11 +46,12 @@ public class CategoriaDao {
     }
 
     public ArrayList<Categoria> getTodos(){
-        String sql = "SELECT Categoria.*, SUM(Item.Saldo) AS Saldo FROM Categoria\n" +
-                "INNER JOIN Item\n" +
+        //db.execSQL("DELETE FROM Categoria");
+        String sql = "SELECT Categoria.*, 0 AS Saldo FROM Categoria\n"; /*+
+                "LEFT JOIN Item\n" +
                 "ON Categoria.id = Item.idCategoria\n" +
                 "GROUP BY(Item.idCategoria)\n" +
-                "ORDER BY(Categoria.descricao)";
+                "ORDER BY(Categoria.descricao)";*/
         Cursor cursor = db.rawQuery(sql, null);
 
         ArrayList list = new ArrayList();
@@ -59,18 +62,5 @@ public class CategoriaDao {
         }
 
         return list;
-    }
-
-    public Map<Categoria, ArrayList<Item>> getCategoriasComItens() {
-        ArrayList<Categoria> categoriaArrayList = getTodos();
-
-        Map<Categoria, ArrayList<Item>> listMap = new HashMap<>();
-        ItemDao itemDao = new ItemDao(db);
-        for (Categoria categoria : categoriaArrayList) {
-            ArrayList<Item> items = itemDao.getTodosPorCategoria(categoria.getId());
-            listMap.put(categoria, items);
-        }
-
-        return listMap;
     }
 }

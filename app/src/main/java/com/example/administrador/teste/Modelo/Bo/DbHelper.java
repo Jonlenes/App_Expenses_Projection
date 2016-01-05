@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.administrador.teste.Modelo.Bo;
 
 import android.content.Context;
@@ -10,17 +5,26 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- *
- * @author Administrador
+ * Created by Administrador on 03/01/2016.
  */
 public class DbHelper extends SQLiteOpenHelper {
     private final static String NOME_BASE = "Financas";
     private final static int VERSAO_BASE = 2;
-
+    private static DbHelper ourInstance = null;
     private final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS ";
 
-    public DbHelper(Context context) {
+    private DbHelper(Context context) {
         super(context, NOME_BASE, null, VERSAO_BASE);
+    }
+
+    public static DbHelper getInstance() {
+        return ourInstance;
+    }
+
+    public static void newInstance(Context context) {
+        if (ourInstance == null) {
+            ourInstance = new DbHelper(context);
+        }
     }
 
     @Override

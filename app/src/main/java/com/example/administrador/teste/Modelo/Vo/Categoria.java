@@ -50,4 +50,9 @@ public class Categoria {
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
+
+    @Override
+    public String toString() {
+        return saldo + "\t\t\t" + descricao;
+    }
 }

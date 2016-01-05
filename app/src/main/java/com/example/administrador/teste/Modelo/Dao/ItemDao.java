@@ -9,6 +9,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.administrador.teste.Modelo.Bo.DbHelper;
 import com.example.administrador.teste.Modelo.Vo.Item;
 
 import java.util.ArrayList;
@@ -20,8 +21,8 @@ import java.util.ArrayList;
 public class ItemDao {
     private SQLiteDatabase db;
 
-    public ItemDao(SQLiteDatabase db) {
-        this.db = db;
+    public ItemDao() {
+        this.db = DbHelper.getInstance().getWritableDatabase();
     }
 
     public void insere(Item item) {
