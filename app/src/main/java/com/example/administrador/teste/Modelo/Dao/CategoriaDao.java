@@ -35,6 +35,7 @@ public class CategoriaDao {
         Log.i("Teste", "Isso foi inserido: " + categoria.getDescricao());
         //Toast.makeText(, "Entrou no onclick", Toast.LENGTH_LONG).show();
     }
+
     public void altera(Categoria categoria){
         ContentValues contentValues = new ContentValues();
 
@@ -62,5 +63,11 @@ public class CategoriaDao {
         }
 
         return list;
+    }
+
+    public Boolean contemPorDescricao(String descricao) {
+        String sql = "SELECT * FROM Categoria\n" +
+                "WHERE descricao = '" + descricao + "'";
+        return  db.rawQuery(sql, null).moveToFirst();
     }
 }

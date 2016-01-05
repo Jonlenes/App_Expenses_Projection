@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.administrador.teste.Modelo.Bo.DbHelper;
+import com.example.administrador.teste.Modelo.Vo.Categoria;
 import com.example.administrador.teste.Modelo.Vo.Item;
 
 import java.util.ArrayList;
@@ -80,5 +81,36 @@ public class ItemDao {
                     cursor.getDouble(4)));
         }
         return list;
+    }
+
+    /*
+    somar o campo valor de todos os itens da cateria passado por parâmetro.
+    se a categoria for nulla, somar todos os itens
+    */
+    public Double somarValor(Categoria categoria) {
+        return 0.0;
+    }
+
+    /*
+    Pega todos os itens, exceto aquele que estiver marcado como "pegar restante"
+    Obs.: só exeiste um item marcado com "pegar restante" na base de dados e o
+        mesmo é indentificado por ter valor = 0.
+    */
+    public ArrayList<Item> getTodosNaoRestante(Categoria categoria) {
+        return null;
+    }
+
+    /*
+    Pega somente o item marcado como "pegar restante"
+    Obs.: considere que sempre haverá um item marcado como "pegar restante"
+    */
+    public Item getItemComRestanteAtivo() {
+        return null;
+    }
+
+    public Boolean contemPorDescricao(String descricao) {
+        String sql = "SELECT * FROM Item\n" +
+                "WHERE descricao = '" + descricao + "'";
+        return  db.rawQuery(sql, null).moveToFirst();
     }
 }

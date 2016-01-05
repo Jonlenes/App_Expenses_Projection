@@ -13,12 +13,11 @@ public class ItemBo {
         itemDao = new ItemDao();
     }
 
-    public void insert(Item item) {
-        try {
-            itemDao.insere(item);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void insert(Item item) throws ModelException {
+        if (itemDao.contemPorDescricao(item.getDescricao()))
+            throw new ModelException("Já possui uma categoria com a mesma descrição.");
+
+        itemDao.insere(item);
     }
 
     public void altera(Item item) {

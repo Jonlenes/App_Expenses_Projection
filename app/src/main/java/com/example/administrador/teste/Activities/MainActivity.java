@@ -112,6 +112,7 @@ public class MainActivity extends Activity {
                         categoriaBo.insert(new Categoria(editTextDescricao.getText().toString()));
                         arrayList = categoriaBo.getTodos();
                         //adapterListCategoria.notifyDataSetChanged();
+
                         ((ListView) findViewById(R.id.categoriasListView)).setAdapter(new AdapterListCategoria(MainActivity.this, arrayList));
                     } catch (Exception e) {
                         e.printStackTrace();

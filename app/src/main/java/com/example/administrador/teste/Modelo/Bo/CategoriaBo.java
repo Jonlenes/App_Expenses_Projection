@@ -19,12 +19,10 @@ public class CategoriaBo {
         categoriaDao = new CategoriaDao();
     }
 
-    public void insert(Categoria categoria) {
-        try {
-            categoriaDao.insere(categoria);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void insert(Categoria categoria) throws ModelException {
+        if (categoriaDao.contemPorDescricao(categoria.getDescricao()))
+            throw new ModelException("Já possui uma categoria com a mesma descrição.");
+        categoriaDao.insere(categoria);
     }
 
     public void altera(Categoria categoria) {
