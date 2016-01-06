@@ -1,9 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.MainActivity">
+    tools:context=".Gui.Activities.MainActivity">
 
     <ListView
         android:id="@+id/categoriasListView"
@@ -14,4 +14,12 @@
         android:layout_alignParentTop="true"
         android:layout_margin="@dimen/marginlist" />
 
-</RelativeLayout>
+    <ImageButton
+        android:id="@+id/add_button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="15dp"
+        android:src="@mipmap/ic_add_button" />
+
+</FrameLayout>

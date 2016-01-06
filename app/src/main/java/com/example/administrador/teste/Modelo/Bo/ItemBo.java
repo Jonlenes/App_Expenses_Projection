@@ -15,7 +15,7 @@ public class ItemBo {
 
     public void insert(Item item) throws ModelException {
         if (itemDao.contemPorDescricao(item.getDescricao()))
-            throw new ModelException("Já possui uma categoria com a mesma descrição.");
+            throw new ModelException("Já possui um item com a mesma descrição.");
 
         itemDao.insere(item);
     }

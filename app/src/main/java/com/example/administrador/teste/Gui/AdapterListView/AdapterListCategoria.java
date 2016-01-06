@@ -1,4 +1,4 @@
-package com.example.administrador.teste.AdapterList;
+package com.example.administrador.teste.Gui.AdapterListView;
 
 import android.app.Activity;
 import android.view.View;
@@ -41,14 +41,35 @@ public class AdapterListCategoria extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
+
         if (convertView == null) {
             convertView = activity.getLayoutInflater().inflate(R.layout.listviewcategoria_row, null);
+            viewHolder = new ViewHolder();
 
-            Categoria categoria = arrayList.get(position);
+            viewHolder.textViewDescricao = (TextView) convertView.findViewById(R.id.descricaoCategoriaTextView);
+            viewHolder.textViewSaldo = (TextView) convertView.findViewById(R.id.saldoCategoriaTextView);
 
-            ((TextView) convertView.findViewById(R.id.descricaoCategoriaTextView)).setText(categoria.getDescricao());
-            ((TextView) convertView.findViewById(R.id.saldoCategoriaTextView)).setText(String.valueOf(categoria.getSaldo()));
+            convertView.setTag(viewHolder);
         }
+        else
+        {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        Categoria categoria = arrayList.get(position);
+        viewHolder.textViewDescricao.setText(categoria.getDescricao());
+        viewHolder.textViewSaldo.setText(String.valueOf(categoria.getSaldo()));
+
         return convertView;
+    }
+
+    public void setArrayList(ArrayList<Categoria> arrayList) {
+        this.arrayList = arrayList;
+    }
+
+    private class ViewHolder {
+        TextView textViewDescricao;
+        TextView textViewSaldo;
     }
 }

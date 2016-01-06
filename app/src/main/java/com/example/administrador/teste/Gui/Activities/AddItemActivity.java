@@ -1,4 +1,4 @@
-package com.example.administrador.teste.Activities;
+package com.example.administrador.teste.Gui.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

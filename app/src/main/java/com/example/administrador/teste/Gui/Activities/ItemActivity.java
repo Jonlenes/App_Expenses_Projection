@@ -1,11 +1,11 @@
-package com.example.administrador.teste.Activities;
+package com.example.administrador.teste.Gui.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.administrador.teste.AdapterList.AdapterListItem;
+import com.example.administrador.teste.Gui.AdapterListView.AdapterListItem;
 import com.example.administrador.teste.Modelo.Dao.ItemDao;
 import com.example.administrador.teste.R;
 
