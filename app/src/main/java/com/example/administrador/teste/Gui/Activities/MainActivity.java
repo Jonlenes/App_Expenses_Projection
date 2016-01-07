@@ -2,7 +2,6 @@ package com.example.administrador.teste.Gui.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,25 +9,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
-import com.example.administrador.teste.AsyncTasks.InsertCategoryTask;
-import com.example.administrador.teste.Gui.AdapterListView.AdapterListCategoria;
 import com.example.administrador.teste.AsyncTasks.InitialOperationDbTask;
-import com.example.administrador.teste.Gui.Dialogs.DialogLoading;
-import com.example.administrador.teste.Modelo.Bo.CategoriaBo;
-import com.example.administrador.teste.Modelo.Bo.DbHelper;
+import com.example.administrador.teste.Gui.AdapterListView.AdapterListCategoria;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
 import com.example.administrador.teste.R;
-
-import java.util.ArrayList;
 
 public class MainActivity extends Activity {
     private ListView listViewCategoria;
 
     private AdapterListCategoria adapterListCategoria;
+    private AdapterView.OnItemClickListener onClickLista = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            Intent intentItem = new Intent(getBaseContext(), ItemActivity.class);
+            intentItem.putExtra("Id", ((Categoria) parent.getItemAtPosition(position)).getId());
+            startActivity(intentItem);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
         listViewCategoria = ((ListView) findViewById(R.id.categoriasListView));
         listViewCategoria.setOnItemClickListener(onClickLista);
 
-        new InitialOperationDbTask(this, new DialogLoading(this).create(), listViewCategoria, adapterListCategoria).execute();
+        new InitialOperationDbTask(this, listViewCategoria, adapterListCategoria).execute();
     }
 
     @Override
@@ -57,30 +57,51 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*private Runnable rInsertCategoria = new Runnable() {
+        public String descricao;
+
+        @Override
+        public void run() {
+            try {
+                CategoriaBo categoriaBo = new CategoriaBo();
+                categoriaBo.insert(new Categoria(descricao));
+                arrayList = categoriaBo.getTodos();
+                adapterListCategoria.setArrayList(arrayList);
+                adapterListCategoria.notifyDataSetChanged();
+
+                //((ListView) findViewById(R.id.categoriasListView)).setAdapter(new AdapterListCategoria(MainActivity.this, arrayList));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };*/
+
     private void showPopUpNewCategory() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
 
         builder.setView(inflater.inflate(R.layout.dialog_insert_category, null));
+        builder.setPositiveButton(R.string.add_categoria, null);
+        builder.setNegativeButton(R.string.cancel_operation, null);
+        builder.create().show();
 
-        final EditText editTextDescricao = (EditText) findViewById(R.id.descricaoInsertCategoriaEditText);
+        /*final EditText editTextDescricao = (EditText) findViewById(R.id.descricaoInsertCategoriaEditText);
         Button buttonOk = (Button) findViewById(R.id.inserirCategoryButton);
-        final AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();*/
 
-        buttonOk.setOnClickListener(new View.OnClickListener() {
+        /*buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (editTextDescricao.getText().length() > 0) {
                     new InsertCategoryTask(adapterListCategoria,
-                            new DialogLoading(MainActivity.this).create(),
                             dialog);
                 } else {
                     editTextDescricao.setError("Preencha a descrição da categoria");
                 }
             }
-        });
+        });*/
 
-        dialog.show();
+        //dialog.show();
 
 
         /*final EditText editTextDescricao = new EditText(this);
@@ -112,34 +133,5 @@ public class MainActivity extends Activity {
 
         dialog.show();*/
     }
-
-    /*private Runnable rInsertCategoria = new Runnable() {
-        public String descricao;
-
-        @Override
-        public void run() {
-            try {
-                CategoriaBo categoriaBo = new CategoriaBo();
-                categoriaBo.insert(new Categoria(descricao));
-                arrayList = categoriaBo.getTodos();
-                adapterListCategoria.setArrayList(arrayList);
-                adapterListCategoria.notifyDataSetChanged();
-
-                //((ListView) findViewById(R.id.categoriasListView)).setAdapter(new AdapterListCategoria(MainActivity.this, arrayList));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };*/
-
-    private AdapterView.OnItemClickListener onClickLista = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            Intent intentItem = new Intent(getBaseContext(), ItemActivity.class);
-            intentItem.putExtra("Id", ((Categoria) parent.getItemAtPosition(position)).getId());
-            startActivity(intentItem);
-        }
-    };
 
 }
