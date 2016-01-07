@@ -13,8 +13,8 @@ import com.example.administrador.teste.R;
 public class DialogLoading extends AlertDialog.Builder {
     public DialogLoading(Context context) {
         super(context);
-        ImageView imageView = new ImageView(context);
+        //ImageView imageView = new ImageView(context);
         //imageView.setImageAlpha(R.mipmap.circle_loading);
-        setView(imageView);
+        //setView(imageView);
     }
 }

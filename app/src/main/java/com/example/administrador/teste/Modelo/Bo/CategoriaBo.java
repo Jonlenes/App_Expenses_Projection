@@ -33,12 +33,28 @@ public class CategoriaBo {
         }
     }
 
-    public void excluir(Categoria categoria) {
-        try {
-            categoriaDao.exclui(categoria.getId());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void excluir(Categoria categoria) throws ModelException {
+        ItemDao itemDao = new ItemDao();
+		Item itemRestante = itemDao.getItemComRestanteAtivo();
+		
+		//verifico se a categoria a ser deletada não possui item restante
+		if (itemRestante.getIdCategoria() == categoria.getId())
+			throw new ModelException("Não é possivel excluir uma categoria que possua um item marcado como restante.");
+		
+		//soma o saldo dos itens exluidos e excluiu os mesmos
+		ArrayList<Item> itens = itemDao.getTodosPorCategoria(categoria.getId());
+		Double saldo = 0.0;
+		for (Item item : itens) {
+			saldo += item.getSaldo();
+			itemDao.exclui(item.getId());
+		}
+		
+		//atualiza o item restante somando o saldo dos itens excluidos
+		itemRestante.setSaldo(itemRestante.getSaldo() + saldo);
+		itemDao.altera(itemRestante);
+		
+		//finalmente, excluir a categoria
+        categoriaDao.exclui(categoria.getId());
     }
 
     public ArrayList<Categoria> getTodos() {

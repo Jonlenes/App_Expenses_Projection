@@ -43,4 +43,17 @@ public class ItemBo {
             e.printStackTrace();
         }
     }
+	
+	public void transferirSaldo(Item itemSaida, Item itemEntrada, Double valor) throws ModelException {
+		if (itemSaida.getSaldo() < valor)  throw new ModelException("Saldo insuficiente.");
+		
+		itemEntrada.setSaldo(itemEntrada.getSaldo() + valor);
+		itemSaida.setSaldo(itemSaida.getSaldo() - valor);
+		
+		//begin transações
+		itemDao.altera(itemEntrada);
+		itemDao.altera(itemSaida);
+		//commit
+		
+	}
 }

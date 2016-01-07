@@ -34,7 +34,10 @@ public class ContaBo {
         return true;
     }
 
-    public Boolean retirar(Double value, Item item) {
-        return true;
+    public void retirar(Double value, Item item) throws ModelException {
+        if (item.getSaldo() < value) throw new ModelException("Saldo insuficiente.");
+		item.setSaldo(item.getSaldo() - value);
+		new ItemDao().altera(item);
     }
+	
 }

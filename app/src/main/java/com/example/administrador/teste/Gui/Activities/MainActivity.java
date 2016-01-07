@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,7 +58,32 @@ public class MainActivity extends Activity {
     }
 
     private void showPopUpNewCategory() {
-        final EditText editTextDescricao = new EditText(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        builder.setView(inflater.inflate(R.layout.dialog_insert_category, null));
+
+        final EditText editTextDescricao = (EditText) findViewById(R.id.descricaoInsertCategoriaEditText);
+        Button buttonOk = (Button) findViewById(R.id.inserirCategoryButton);
+        final AlertDialog dialog = builder.create();
+
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (editTextDescricao.getText().length() > 0) {
+                    new InsertCategoryTask(adapterListCategoria,
+                            new DialogLoading(MainActivity.this).create(),
+                            dialog);
+                } else {
+                    editTextDescricao.setError("Preencha a descrição da categoria");
+                }
+            }
+        });
+
+        dialog.show();
+
+
+        /*final EditText editTextDescricao = new EditText(this);
         final Button buttonOk = new Button(this);
         AlertDialog.Builder builder  = new AlertDialog.Builder(this);
 
@@ -84,7 +110,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        dialog.show();
+        dialog.show();*/
     }
 
     /*private Runnable rInsertCategoria = new Runnable() {

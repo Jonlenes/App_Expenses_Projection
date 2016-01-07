@@ -18,5 +18,6 @@
     <string name="add_categoria">OK</string>
     <string name="cancel_operation">Cancelar</string>
     <string name="titulo_nova_categoria">Adicionar Nova Categoria</string>
-    <string name="message_new_category">Descrição</string>
+    <string name="descricao">Descrição</string>
+
 </resources>

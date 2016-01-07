@@ -8,6 +8,7 @@ import android.widget.ListView;
 import com.example.administrador.teste.Gui.AdapterListView.AdapterListCategoria;
 import com.example.administrador.teste.Modelo.Bo.CategoriaBo;
 import com.example.administrador.teste.Modelo.Bo.DbHelper;
+import com.example.administrador.teste.Modelo.Bo.ModelException;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
 
 import java.util.ArrayList;
