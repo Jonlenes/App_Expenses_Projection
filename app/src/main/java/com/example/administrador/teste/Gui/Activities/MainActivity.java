@@ -2,6 +2,7 @@ package com.example.administrador.teste.Gui.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.administrador.teste.AsyncTasks.InitialOperationDbTask;
+import com.example.administrador.teste.AsyncTasks.InsertCategoryTask;
 import com.example.administrador.teste.Gui.AdapterListView.AdapterListCategoria;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
 import com.example.administrador.teste.R;
@@ -80,8 +82,15 @@ public class MainActivity extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
 
+        DialogInterface.OnClickListener clickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                new InsertCategoryTask(adapterListCategoria, (AlertDialog) dialog).execute("Alimentação");
+            }
+        };
+
         builder.setView(inflater.inflate(R.layout.dialog_insert_category, null));
-        builder.setPositiveButton(R.string.add_categoria, null);
+        builder.setPositiveButton(R.string.add_categoria, clickListener);
         builder.setNegativeButton(R.string.cancel_operation, null);
         builder.create().show();
 

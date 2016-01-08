@@ -19,5 +19,6 @@
     <string name="cancel_operation">Cancelar</string>
     <string name="titulo_nova_categoria">Adicionar Nova Categoria</string>
     <string name="descricao">Descrição</string>
+    <string name="title_insert_category">Nova categoria</string>
 
 </resources>
