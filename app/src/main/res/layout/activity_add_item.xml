@@ -10,31 +10,22 @@
     android:paddingTop="@dimen/activity_margin_top"
     tools:context=".Gui.Activities.AddItemActivity">
 
-    <TextView
-        android:id="@+id/descricaoItemTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/descricao_item" />
-
     <EditText
         android:id="@+id/descricaoItemEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
-
-    <TextView
-        android:id="@+id/saldoTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top_campos"
-        android:text="@string/valor_item" />
+        android:inputType="text"
+        android:hint="@string/descricao_item"
+        android:layout_marginTop="10dp" />
 
     <EditText
         android:id="@+id/valorItemEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        android:hint="@string/valor_item"
+        android:layout_marginTop="10dp" />
 
     <CheckBox
         android:id="@+id/restanteValorCheckBox"
@@ -44,12 +35,31 @@
         android:checked="false"
         android:text="@string/valor_restante" />
 
-    <Button
-        android:id="@+id/addItemButton"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="@dimen/margin_top_campos"
-        android:text="@string/add_item" />
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            android:id="@+id/buttonCancel"
+            android:layout_gravity="right"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/addItemButton"
+            android:layout_toStartOf="@+id/addItemButton" />
+
+        <Button
+            android:id="@+id/addItemButton"
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:text="@string/add_item"
+            android:layout_gravity="right"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
 </LinearLayout>

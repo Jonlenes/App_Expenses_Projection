@@ -3,6 +3,8 @@ package com.example.administrador.teste.Modelo.Bo;
 import com.example.administrador.teste.Modelo.Dao.ItemDao;
 import com.example.administrador.teste.Modelo.Vo.Item;
 
+import java.util.ArrayList;
+
 /**
  * Created by Administrador on 04/01/2016.
  */
@@ -36,12 +38,22 @@ public class ItemBo {
         }
     }
 
-    public void getTodos() {
+    public ArrayList<Item> getTodos() {
         try {
-            itemDao.getTodos();
+            return itemDao.getTodos();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    public ArrayList<Item> getTodosPorCategoria(Long idCategoria) {
+        try {
+            return itemDao.getTodosPorCategoria(idCategoria);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 	
 	public void transferirSaldo(Item itemSaida, Item itemEntrada, Double valor) throws ModelException {

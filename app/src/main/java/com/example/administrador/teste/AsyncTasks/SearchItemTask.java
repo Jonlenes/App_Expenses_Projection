@@ -6,36 +6,38 @@ import android.os.AsyncTask;
 import android.widget.ListView;
 
 import com.example.administrador.teste.Gui.AdapterListView.AdapterListCategoria;
+import com.example.administrador.teste.Gui.AdapterListView.AdapterListItem;
 import com.example.administrador.teste.Modelo.Bo.CategoriaBo;
 import com.example.administrador.teste.Modelo.Bo.DbHelper;
+import com.example.administrador.teste.Modelo.Bo.ItemBo;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
+import com.example.administrador.teste.Modelo.Vo.Item;
 
 import java.util.ArrayList;
 
 /**
  * Created by Jonlenes on 06/01/2016.
  */
-public class InitialOperationDbTask extends AsyncTask<Void, Void, ArrayList<Categoria>> {
+public class SearchItemTask extends AsyncTask<Long, Void, ArrayList<Item>> {
     private ProgressDialog progressDialog;
 
     private Activity activity;
     private ListView listView;
-    private AdapterListCategoria adapterListCategoria;
+    private AdapterListItem adapterListItem;
 
-    public InitialOperationDbTask(Activity activity, ListView listView, AdapterListCategoria adapterListCategoria) {
+    public SearchItemTask(Activity activity, ListView listView, AdapterListItem adapterListItem) {
         this.activity = activity;
         this.listView = listView;
-        this.adapterListCategoria = adapterListCategoria;
+        this.adapterListItem = adapterListItem;
 
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Buscando categorias...");
+        progressDialog.setMessage("Buscando itens...");
         progressDialog.setCancelable(false);
     }
 
     @Override
-    protected ArrayList<Categoria> doInBackground(Void... params) {
-        DbHelper.newInstance(activity);
-        return new CategoriaBo().getTodos();
+    protected ArrayList<Item> doInBackground(Long... params) {
+        return new ItemBo().getTodosPorCategoria(params[0]);
     }
 
     @Override
@@ -45,11 +47,16 @@ public class InitialOperationDbTask extends AsyncTask<Void, Void, ArrayList<Cate
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Categoria> arrayList) {
+    protected void onPostExecute(ArrayList<Item> arrayList) {
         super.onPostExecute(arrayList);
 
-        adapterListCategoria = new AdapterListCategoria(activity, arrayList);
-        listView.setAdapter(adapterListCategoria);
+        if (adapterListItem == null) {
+            adapterListItem = new AdapterListItem(activity, arrayList);
+            listView.setAdapter(adapterListItem);
+        } else {
+            adapterListItem.setArrayList(arrayList);
+            adapterListItem.notifyDataSetChanged();
+        }
 
         progressDialog.dismiss();
     }

@@ -28,7 +28,7 @@ public class InsertCategoryTask extends AsyncTask<String, Void, ArrayList<Catego
         this.dialogInsert = dialogInsert;
 
         progressDialog = new ProgressDialog(dialogInsert.getContext());
-        progressDialog.setMessage("Inserindo...");
+        progressDialog.setMessage("Inserindo categoria...");
     }
 
     @Override

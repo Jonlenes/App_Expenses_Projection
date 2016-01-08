@@ -51,4 +51,8 @@ public class AdapterListItem extends BaseAdapter {
         }
         return convertView;
     }
+
+    public void setArrayList(ArrayList<Item> arrayList) {
+        this.arrayList = arrayList;
+    }
 }
