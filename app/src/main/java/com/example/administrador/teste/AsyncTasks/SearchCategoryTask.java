@@ -15,14 +15,14 @@ import java.util.ArrayList;
 /**
  * Created by Jonlenes on 06/01/2016.
  */
-public class InitialOperationDbTask extends AsyncTask<Void, Void, ArrayList<Categoria>> {
+public class SearchCategoryTask extends AsyncTask<Void, Void, ArrayList<Categoria>> {
     private ProgressDialog progressDialog;
 
     private Activity activity;
     private ListView listView;
     private AdapterListCategoria adapterListCategoria;
 
-    public InitialOperationDbTask(Activity activity, ListView listView, AdapterListCategoria adapterListCategoria) {
+    public SearchCategoryTask(Activity activity, ListView listView, AdapterListCategoria adapterListCategoria) {
         this.activity = activity;
         this.listView = listView;
         this.adapterListCategoria = adapterListCategoria;
@@ -48,8 +48,13 @@ public class InitialOperationDbTask extends AsyncTask<Void, Void, ArrayList<Cate
     protected void onPostExecute(ArrayList<Categoria> arrayList) {
         super.onPostExecute(arrayList);
 
-        adapterListCategoria = new AdapterListCategoria(activity, arrayList);
-        listView.setAdapter(adapterListCategoria);
+        if (adapterListCategoria == null) {
+            adapterListCategoria = new AdapterListCategoria(activity, arrayList);
+            listView.setAdapter(adapterListCategoria);
+        } else {
+            adapterListCategoria.setArrayList(arrayList);
+            adapterListCategoria.notifyDataSetChanged();
+        }
 
         progressDialog.dismiss();
     }

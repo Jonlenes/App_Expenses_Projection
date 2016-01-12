@@ -1,46 +1,40 @@
 package com.example.administrador.teste.AsyncTasks;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.example.administrador.teste.Gui.AdapterListView.AdapterListCategoria;
+import com.example.administrador.teste.Gui.Dialogs.DialogInsertCategory;
 import com.example.administrador.teste.Modelo.Bo.CategoriaBo;
 import com.example.administrador.teste.Modelo.Bo.ModelException;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
 
-import java.util.ArrayList;
-
 /**
  * Created by Jonlenes on 06/01/2016.
  */
-public class InsertCategoryTask extends AsyncTask<String, Void, ArrayList<Categoria>> {
+public class InsertCategoryTask extends AsyncTask<String, Void, String> {
+    private Context context;
     private ProgressDialog progressDialog;
-
     private String message;
 
-    private AdapterListCategoria adapterListCategoria;
-    private AlertDialog dialogInsert;
 
-    public InsertCategoryTask(AdapterListCategoria adapterListCategoria, AlertDialog dialogInsert) {
-        this.adapterListCategoria = adapterListCategoria;
-        this.dialogInsert = dialogInsert;
+    public InsertCategoryTask(Context context) {
+        this.context = context;
 
-        progressDialog = new ProgressDialog(dialogInsert.getContext());
+        progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Inserindo categoria...");
+        progressDialog.setCancelable(false);
     }
 
     @Override
-    protected ArrayList<Categoria> doInBackground(String... params) {
+    protected String doInBackground(String... params) {
         try {
-            CategoriaBo categoriaBo = new CategoriaBo();
-            categoriaBo.insert(new Categoria(params[0]));
-            return categoriaBo.getTodos();
+            new CategoriaBo().insert(new Categoria(params[0]));
         } catch (ModelException e) {
             message = e.getMessage();
         }
-        return null;
+        return params[0];
     }
 
     @Override
@@ -51,17 +45,13 @@ public class InsertCategoryTask extends AsyncTask<String, Void, ArrayList<Catego
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Categoria> arrayList) {
-        super.onPostExecute(arrayList);
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
 
         progressDialog.dismiss();
-        if (message.isEmpty()) {
-            adapterListCategoria.setArrayList(arrayList);
-            adapterListCategoria.notifyDataSetChanged();
-            dialogInsert.dismiss();
-        } else {
-            dialogInsert.show();
-            Toast.makeText(dialogInsert.getContext(), message, Toast.LENGTH_LONG).show();
+        if (!message.isEmpty()) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+            new DialogInsertCategory(context, s);
         }
 
     }
