@@ -49,9 +49,9 @@ public class InsertCategoryTask extends AsyncTask<String, Void, String> {
         super.onPostExecute(s);
 
         progressDialog.dismiss();
-        if (!message.isEmpty()) {
+        if (message != null && !message.isEmpty()) {
             Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-            new DialogInsertCategory(context, s);
+            //new DialogInsertCategory(context, s);
         }
 
     }

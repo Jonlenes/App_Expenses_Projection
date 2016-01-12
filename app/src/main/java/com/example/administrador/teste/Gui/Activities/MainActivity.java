@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.example.administrador.teste.AsyncTasks.SearchCategoryTask;
 import com.example.administrador.teste.Gui.AdapterListView.AdapterListCategoria;
+import com.example.administrador.teste.Gui.Dialogs.DialogInsert;
 import com.example.administrador.teste.Gui.Dialogs.TesteAAA;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
 import com.example.administrador.teste.R;
@@ -68,7 +69,7 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_category:
-                break;
+                new DialogInsert(this).show();
         }
         return super.onOptionsItemSelected(item);
     }
