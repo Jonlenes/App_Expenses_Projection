@@ -1,37 +1,41 @@
 package com.example.administrador.teste.Gui.Activities;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.administrador.teste.AsyncTasks.SearchCategoryTask;
 import com.example.administrador.teste.Gui.AdapterListView.AdapterListCategoria;
-import com.example.administrador.teste.Gui.Dialogs.DialogInsert;
-import com.example.administrador.teste.Gui.Dialogs.TesteAAA;
+import com.example.administrador.teste.Gui.Dialogs.DialogInsertCategory;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
 import com.example.administrador.teste.R;
 
 public class MainActivity extends Activity {
-    View.OnClickListener onClickListenerInserir = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            //new DialogInsertCategory(MainActivity.this, "");
-            new TesteAAA(MainActivity.this);
-        }
-    };
+
     private ListView listViewCategoria;
     private FloatingActionButton fabInserir;
     private AdapterListCategoria adapterListCategoria;
+    View.OnClickListener onClickListenerInserir = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            DialogInsertCategory dialogInsertCategory = new DialogInsertCategory(MainActivity.this);
+            dialogInsertCategory.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    new SearchCategoryTask(MainActivity.this, listViewCategoria, adapterListCategoria).execute();
+                }
+            });
+            dialogInsertCategory.show();
+        }
+    };
     private AdapterView.OnItemClickListener onClickLista = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
             Intent intentItem = new Intent(getBaseContext(), ItemActivity.class);
             intentItem.putExtra("Id", ((Categoria) parent.getItemAtPosition(position)).getId());
             startActivity(intentItem);
@@ -58,7 +62,7 @@ public class MainActivity extends Activity {
         new SearchCategoryTask(this, listViewCategoria, adapterListCategoria).execute();
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -69,9 +73,9 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_category:
-                new DialogInsert(this).show();
+                break;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
 }

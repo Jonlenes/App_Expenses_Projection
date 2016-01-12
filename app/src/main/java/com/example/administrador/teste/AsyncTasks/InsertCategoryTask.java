@@ -1,11 +1,11 @@
 package com.example.administrador.teste.AsyncTasks;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.example.administrador.teste.Gui.Dialogs.DialogInsertCategory;
 import com.example.administrador.teste.Modelo.Bo.CategoriaBo;
 import com.example.administrador.teste.Modelo.Bo.ModelException;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
@@ -15,12 +15,14 @@ import com.example.administrador.teste.Modelo.Vo.Categoria;
  */
 public class InsertCategoryTask extends AsyncTask<String, Void, String> {
     private Context context;
+    private AlertDialog dialog;
     private ProgressDialog progressDialog;
     private String message;
 
 
-    public InsertCategoryTask(Context context) {
+    public InsertCategoryTask(Context context, AlertDialog dialog) {
         this.context = context;
+        this.dialog = dialog;
 
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Inserindo categoria...");
@@ -51,7 +53,8 @@ public class InsertCategoryTask extends AsyncTask<String, Void, String> {
         progressDialog.dismiss();
         if (message != null && !message.isEmpty()) {
             Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-            //new DialogInsertCategory(context, s);
+        } else {
+            dialog.dismiss();
         }
 
     }
