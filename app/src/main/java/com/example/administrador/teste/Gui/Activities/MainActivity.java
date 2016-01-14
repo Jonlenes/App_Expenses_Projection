@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 import com.example.administrador.teste.AsyncTasks.SearchCategoryTask;
 import com.example.administrador.teste.Gui.AdapterListView.AdapterListCategoria;
-import com.example.administrador.teste.Gui.Dialogs.DialogInsertCategory;
+import com.example.administrador.teste.Gui.Dialogs.DialogMntCategory;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
 import com.example.administrador.teste.R;
 
@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
     View.OnClickListener onClickListenerInserir = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DialogInsertCategory dialogInsertCategory = new DialogInsertCategory(MainActivity.this);
+            DialogMntCategory dialogInsertCategory = new DialogMntCategory(MainActivity.this);
             dialogInsertCategory.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {

@@ -6,9 +6,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.example.administrador.teste.Gui.Dialogs.DialogInsertCategory;
 import com.example.administrador.teste.Modelo.Bo.CategoriaBo;
-import com.example.administrador.teste.Modelo.Bo.ItemBo;
 import com.example.administrador.teste.Modelo.Bo.ModelException;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
 import com.example.administrador.teste.Modelo.Vo.EnumOperation;

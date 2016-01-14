@@ -13,7 +13,7 @@ import com.example.administrador.teste.Modelo.Vo.EnumOperation;
 import com.example.administrador.teste.Modelo.Vo.Item;
 import com.example.administrador.teste.R;
 
-public class AddItemActivity extends Activity {
+public class MntItemActivity extends Activity {
 
     private EditText descricaoEditText;
     private EditText valorEditText;
@@ -22,34 +22,6 @@ public class AddItemActivity extends Activity {
     private Button cancelButton;
     private CheckBox checkBoxPegarRestante;
     private Long idCategoria;
-    private View.OnClickListener onClickListenerInserir = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (descricaoEditText.getText().length() <= 0) {
-                descricaoEditText.setError("Preencha a descrição do item.");
-            } else if (valorEditText.getText().length() <= 0 && !checkBoxPegarRestante.isChecked()) {
-                valorEditText.setError("Preencha o valor.");
-            } else {
-                new OperationItemTask(AddItemActivity.this, EnumOperation.insert).execute(new Item(AddItemActivity.this.idCategoria,
-                        descricaoEditText.getText().toString(),
-                        checkBoxPegarRestante.isChecked() ? 0 : Double.parseDouble(valorEditText.getText().toString()),
-                        saldoInicialEditText.getText().length() <= 0 ? 0 : Double.parseDouble(saldoInicialEditText.getText().toString())));
-            }
-        }
-    };
-    private View.OnClickListener onClickListenerCancel = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            finish();
-        }
-    };
-    private CompoundButton.OnCheckedChangeListener onCheckedChangeListenerPegarRestante = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            valorEditText.setText("");
-            valorEditText.setEnabled(isChecked);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +41,35 @@ public class AddItemActivity extends Activity {
         cancelButton.setOnClickListener(onClickListenerCancel);
         checkBoxPegarRestante.setOnCheckedChangeListener(onCheckedChangeListenerPegarRestante);
     }
+
+    private View.OnClickListener onClickListenerInserir = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (descricaoEditText.getText().length() <= 0) {
+                descricaoEditText.setError("Preencha a descrição do item.");
+            } else if (valorEditText.getText().length() <= 0 && !checkBoxPegarRestante.isChecked()) {
+                valorEditText.setError("Preencha o valor.");
+            } else {
+                new OperationItemTask(MntItemActivity.this, EnumOperation.insert).execute(new Item(MntItemActivity.this.idCategoria,
+                        descricaoEditText.getText().toString(),
+                        checkBoxPegarRestante.isChecked() ? 0 : Double.parseDouble(valorEditText.getText().toString()),
+                        saldoInicialEditText.getText().length() <= 0 ? 0 : Double.parseDouble(saldoInicialEditText.getText().toString())));
+            }
+        }
+    };
+    private View.OnClickListener onClickListenerCancel = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
+    };
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListenerPegarRestante = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            valorEditText.setText("");
+            valorEditText.setEnabled(isChecked);
+        }
+    };
 
 
 }

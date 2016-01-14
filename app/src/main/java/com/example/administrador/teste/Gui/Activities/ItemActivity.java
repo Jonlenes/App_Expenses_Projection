@@ -21,7 +21,7 @@ public class ItemActivity extends AppCompatActivity {
     private View.OnClickListener onClickListenerAddItem = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intentAddItem = new Intent(ItemActivity.this, AddItemActivity.class);
+            Intent intentAddItem = new Intent(ItemActivity.this, MntItemActivity.class);
             intentAddItem.putExtra("idCategoria", ItemActivity.this.idCategoria);
             ItemActivity.this.startActivity(intentAddItem);
         }
