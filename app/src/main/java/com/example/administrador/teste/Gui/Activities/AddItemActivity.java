@@ -9,14 +9,18 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.example.administrador.teste.AsyncTasks.InsertItemTask;
+import com.example.administrador.teste.Modelo.Vo.Item;
 import com.example.administrador.teste.R;
 
 public class AddItemActivity extends Activity {
+
     private EditText descricaoEditText;
     private EditText valorEditText;
+    private EditText saldoInicialEditText;
     private Button addItemButton;
     private Button cancelButton;
     private CheckBox checkBoxPegarRestante;
+    private Long idCategoria;
     private View.OnClickListener onClickListenerInserir = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -25,7 +29,10 @@ public class AddItemActivity extends Activity {
             } else if (valorEditText.getText().length() <= 0 && !checkBoxPegarRestante.isChecked()) {
                 valorEditText.setError("Preencha o valor.");
             } else {
-                new InsertItemTask(AddItemActivity.this).execute();
+                new InsertItemTask(AddItemActivity.this).execute(new Item(AddItemActivity.this.idCategoria,
+                        descricaoEditText.getText().toString(),
+                        checkBoxPegarRestante.isChecked() ? 0 : Double.parseDouble(valorEditText.getText().toString()),
+                        saldoInicialEditText.getText().length() <= 0 ? 0 : Double.parseDouble(saldoInicialEditText.getText().toString())));
             }
         }
     };
@@ -48,8 +55,11 @@ public class AddItemActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
+        idCategoria = getIntent().getLongExtra("idCategoria", -1);
+
         descricaoEditText = (EditText) findViewById(R.id.descricaoItemEditText);
         valorEditText = (EditText) findViewById(R.id.valorItemEditText);
+        saldoInicialEditText = (EditText) findViewById(R.id.saldoInicialEditText);
         addItemButton = (Button) findViewById(R.id.addItemButton);
         cancelButton = (Button) findViewById(R.id.buttonCancel);
         checkBoxPegarRestante = (CheckBox) findViewById(R.id.restanteValorCheckBox);
@@ -58,4 +68,6 @@ public class AddItemActivity extends Activity {
         cancelButton.setOnClickListener(onClickListenerCancel);
         checkBoxPegarRestante.setOnCheckedChangeListener(onCheckedChangeListenerPegarRestante);
     }
+
+
 }

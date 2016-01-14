@@ -1,6 +1,7 @@
 package com.example.administrador.teste.Gui.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class MainActivity extends Activity {
     private ListView listViewCategoria;
     private FloatingActionButton fabInserir;
     private AdapterListCategoria adapterListCategoria;
+    ;
     View.OnClickListener onClickListenerInserir = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -42,26 +44,6 @@ public class MainActivity extends Activity {
         }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        listViewCategoria = ((ListView) findViewById(R.id.categoriasListView));
-        fabInserir = (FloatingActionButton) findViewById(R.id.fabInserir);
-
-        listViewCategoria.setOnItemClickListener(onClickLista);
-        fabInserir.setOnClickListener(onClickListenerInserir);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        new SearchCategoryTask(this, listViewCategoria, adapterListCategoria).execute();
-    }
-
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -77,5 +59,51 @@ public class MainActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }*/
+    private AdapterView.OnItemLongClickListener onItemLongClickListenerCategoria = new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+            builder
+                    .setTitle("Opções")
+                    .setItems(R.array.dialog_options_itens,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case 0:
+                                            break;
+                                        case 1:
+                                            break;
+                                    }
+                                }
+                            })
+                    .setNegativeButton("Cancelar", null)
+                    .create().show();
+
+            return true;
+        }
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        listViewCategoria = ((ListView) findViewById(R.id.categoriasListView));
+        fabInserir = (FloatingActionButton) findViewById(R.id.fabInserir);
+
+        listViewCategoria.setOnItemClickListener(onClickLista);
+        listViewCategoria.setOnItemLongClickListener(onItemLongClickListenerCategoria);
+        fabInserir.setOnClickListener(onClickListenerInserir);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        new SearchCategoryTask(this, listViewCategoria, adapterListCategoria).execute();
+    }
 
 }

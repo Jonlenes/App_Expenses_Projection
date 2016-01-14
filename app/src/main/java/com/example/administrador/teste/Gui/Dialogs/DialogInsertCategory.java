@@ -13,6 +13,7 @@ import com.example.administrador.teste.R;
  * Created by Jonlenes on 11/01/2016.
  */
 public class DialogInsertCategory extends AlertDialog {
+
     private EditText descricaoEditText;
     private View.OnClickListener clickListenerCancel = new View.OnClickListener() {
         @Override

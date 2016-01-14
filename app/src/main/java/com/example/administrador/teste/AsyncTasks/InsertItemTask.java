@@ -30,9 +30,7 @@ public class InsertItemTask extends AsyncTask<Item, Void, Void> {
     protected Void doInBackground(Item... params) {
 
         try {
-            ItemBo itemBo = new ItemBo();
-            itemBo.insert(params[0]);
-            return null;
+            new ItemBo().insert(params[0]);
         } catch (ModelException e) {
             message = e.getMessage();
         }
@@ -51,7 +49,7 @@ public class InsertItemTask extends AsyncTask<Item, Void, Void> {
         super.onPostExecute(aVoid);
 
         progressDialog.dismiss();
-        if (message.isEmpty()) {
+        if (message == null || message.isEmpty()) {
             activity.finish();
         } else {
             Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
