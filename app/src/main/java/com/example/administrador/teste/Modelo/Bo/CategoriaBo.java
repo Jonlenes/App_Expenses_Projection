@@ -22,15 +22,15 @@ public class CategoriaBo {
     public void insert(Categoria categoria) throws ModelException {
         if (categoriaDao.contemPorDescricao(categoria.getDescricao()))
             throw new ModelException("Já possui uma categoria com a mesma descrição.");
+
         categoriaDao.insere(categoria);
     }
 
-    public void altera(Categoria categoria) {
-        try {
-            categoriaDao.altera(categoria);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void altera(Categoria categoria) throws ModelException {
+        if (categoriaDao.contemPorDescricao(categoria.getDescricao()))
+            throw new ModelException("Já possui uma categoria com a mesma descrição.");
+
+        categoriaDao.altera(categoria);
     }
 
     public void excluir(Categoria categoria) throws ModelException {

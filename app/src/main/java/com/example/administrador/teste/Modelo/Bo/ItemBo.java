@@ -22,20 +22,19 @@ public class ItemBo {
         itemDao.insere(item);
     }
 
-    public void altera(Item item) {
-        try {
-            itemDao.altera(item);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void altera(Item item) throws ModelException {
+        if (itemDao.contemPorDescricao(item.getDescricao()))
+            throw new ModelException("Já possui um item com a mesma descrição.");
+
+        itemDao.altera(item);
+
     }
 
-    public void excluir(Item item) {
-        try {
-            itemDao.exclui(item.getId());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void excluir(Item item) throws ModelException {
+        if (itemDao.getItemComRestanteAtivo().getId() == item.getId())
+            throw new ModelException("Esse item é restante e não pode ser excluido");
+
+        itemDao.exclui(item.getId());
     }
 
     public ArrayList<Item> getTodos() {

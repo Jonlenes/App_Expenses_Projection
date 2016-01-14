@@ -7,19 +7,22 @@ import android.widget.Toast;
 
 import com.example.administrador.teste.Modelo.Bo.ItemBo;
 import com.example.administrador.teste.Modelo.Bo.ModelException;
+import com.example.administrador.teste.Modelo.Vo.EnumOperation;
 import com.example.administrador.teste.Modelo.Vo.Item;
 
 /**
  * Created by Jonlenes on 06/01/2016.
  */
-public class InsertItemTask extends AsyncTask<Item, Void, Void> {
+public class OperationItemTask extends AsyncTask<Item, Void, Void> {
 
     private ProgressDialog progressDialog;
     private String message;
     private Activity activity;
+    private EnumOperation operation;
 
-    public InsertItemTask(Activity activity) {
+    public OperationItemTask(Activity activity, EnumOperation operation) {
         this.activity = activity;
+        this.operation = operation;
 
         progressDialog = new ProgressDialog(activity);
         progressDialog.setMessage("Inserindo item...");
@@ -31,8 +34,19 @@ public class InsertItemTask extends AsyncTask<Item, Void, Void> {
 
         try {
             ItemBo itemBo = new ItemBo();
-            itemBo.insert(params[0]);
-            return null;
+            switch (operation) {
+                case insert:
+                    itemBo.insert(params[0]);
+                    break;
+
+                case update:
+                    itemBo.altera(params[0]);
+                    break;
+
+                case delete:
+                    itemBo.excluir(params[0]);
+                    break;
+            }
         } catch (ModelException e) {
             message = e.getMessage();
         }
