@@ -8,7 +8,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
-import com.example.administrador.teste.AsyncTasks.InsertItemTask;
+import com.example.administrador.teste.AsyncTasks.OperationItemTask;
+import com.example.administrador.teste.Modelo.Vo.EnumOperation;
 import com.example.administrador.teste.Modelo.Vo.Item;
 import com.example.administrador.teste.R;
 
@@ -29,7 +30,7 @@ public class AddItemActivity extends Activity {
             } else if (valorEditText.getText().length() <= 0 && !checkBoxPegarRestante.isChecked()) {
                 valorEditText.setError("Preencha o valor.");
             } else {
-                new InsertItemTask(AddItemActivity.this).execute(new Item(AddItemActivity.this.idCategoria,
+                new OperationItemTask(AddItemActivity.this, EnumOperation.insert).execute(new Item(AddItemActivity.this.idCategoria,
                         descricaoEditText.getText().toString(),
                         checkBoxPegarRestante.isChecked() ? 0 : Double.parseDouble(valorEditText.getText().toString()),
                         saldoInicialEditText.getText().length() <= 0 ? 0 : Double.parseDouble(saldoInicialEditText.getText().toString())));

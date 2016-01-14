@@ -107,7 +107,7 @@ public class ContaBo {
         itemComRestante.setSaldo(itemComRestante.getSaldo() + (value - valorNecessario));
         itemDao.altera(itemComRestante);
 
-        return true;
+        return;
     }
 
     public void retirar(Double value, Item item) throws ModelException {

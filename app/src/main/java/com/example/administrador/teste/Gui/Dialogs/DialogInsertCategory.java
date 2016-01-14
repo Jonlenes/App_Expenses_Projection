@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.administrador.teste.AsyncTasks.InsertCategoryTask;
+import com.example.administrador.teste.AsyncTasks.OperationCategoryTask;
+import com.example.administrador.teste.Modelo.Vo.Categoria;
+import com.example.administrador.teste.Modelo.Vo.EnumOperation;
 import com.example.administrador.teste.R;
 
 /**
@@ -25,7 +27,7 @@ public class DialogInsertCategory extends AlertDialog {
         @Override
         public void onClick(View v) {
             if (descricaoEditText.getText().length() > 0) {
-                new InsertCategoryTask(getContext(), DialogInsertCategory.this).execute(descricaoEditText.getText().toString());
+                new OperationCategoryTask(getContext(), DialogInsertCategory.this, EnumOperation.insert).execute(new Categoria(descricaoEditText.getText().toString()));
             } else {
                 descricaoEditText.setError("Preencha a descrição.");
             }

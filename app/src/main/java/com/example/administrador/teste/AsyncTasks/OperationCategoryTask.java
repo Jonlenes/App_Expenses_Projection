@@ -1,5 +1,6 @@
 package com.example.administrador.teste.AsyncTasks;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -18,13 +19,15 @@ import com.example.administrador.teste.Modelo.Vo.EnumOperation;
 public class OperationCategoryTask extends AsyncTask<Categoria, Void, Void> {
 
     private Context context;
+    private AlertDialog dialog;
     private ProgressDialog progressDialog;
     private String message;
     private EnumOperation operation;
 
 
-    public OperationCategoryTask(Context context, EnumOperation operation) {
+    public OperationCategoryTask(Context context, AlertDialog dialog, EnumOperation operation) {
         this.context = context;
+        this.dialog = dialog;
         this.operation = operation;
 
         progressDialog = new ProgressDialog(context);
@@ -69,6 +72,8 @@ public class OperationCategoryTask extends AsyncTask<Categoria, Void, Void> {
         progressDialog.dismiss();
         if (message != null && !message.isEmpty()) {
             Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        } else {
+            dialog.dismiss();
         }
 
     }
