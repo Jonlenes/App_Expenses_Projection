@@ -48,11 +48,11 @@ public class CategoriaDao {
 
     public ArrayList<Categoria> getTodos(){
         //db.execSQL("DELETE FROM Categoria");
-        String sql = "SELECT Categoria.*, 0 AS Saldo FROM Categoria\n"; /*+
+        String sql = "SELECT Categoria.*, SUM(Item.Saldo) AS Saldo FROM Categoria\n" +
                 "LEFT JOIN Item\n" +
                 "ON Categoria.id = Item.idCategoria\n" +
-                "GROUP BY(Item.idCategoria)\n" +
-                "ORDER BY(Categoria.descricao)";*/
+                "GROUP BY(Categoria.id)\n" +
+                "ORDER BY(Categoria.descricao)";
         Cursor cursor = db.rawQuery(sql, null);
 
         ArrayList list = new ArrayList();

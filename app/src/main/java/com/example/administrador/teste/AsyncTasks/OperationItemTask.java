@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import com.example.administrador.teste.Modelo.Bo.ItemBo;
 import com.example.administrador.teste.Modelo.Bo.ModelException;
-import com.example.administrador.teste.Modelo.Vo.EnumOperation;
 import com.example.administrador.teste.Modelo.Vo.Item;
 
 /**
@@ -65,7 +64,7 @@ public class OperationItemTask extends AsyncTask<Item, Void, Void> {
         super.onPostExecute(aVoid);
 
         progressDialog.dismiss();
-        if (message.isEmpty()) {
+        if (message == null || message.isEmpty()) {
             activity.finish();
         } else {
             Toast.makeText(activity, message, Toast.LENGTH_LONG).show();

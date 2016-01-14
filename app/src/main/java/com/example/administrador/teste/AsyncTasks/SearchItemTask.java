@@ -5,12 +5,8 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.widget.ListView;
 
-import com.example.administrador.teste.Gui.AdapterListView.AdapterListCategoria;
 import com.example.administrador.teste.Gui.AdapterListView.AdapterListItem;
-import com.example.administrador.teste.Modelo.Bo.CategoriaBo;
-import com.example.administrador.teste.Modelo.Bo.DbHelper;
 import com.example.administrador.teste.Modelo.Bo.ItemBo;
-import com.example.administrador.teste.Modelo.Vo.Categoria;
 import com.example.administrador.teste.Modelo.Vo.Item;
 
 import java.util.ArrayList;
@@ -19,8 +15,8 @@ import java.util.ArrayList;
  * Created by Jonlenes on 06/01/2016.
  */
 public class SearchItemTask extends AsyncTask<Long, Void, ArrayList<Item>> {
-    private ProgressDialog progressDialog;
 
+    private ProgressDialog progressDialog;
     private Activity activity;
     private ListView listView;
     private AdapterListItem adapterListItem;

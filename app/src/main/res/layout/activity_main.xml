@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
+    <!--<android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.AppBarLayout> -->
 
     <ListView
         android:id="@+id/categoriasListView"
@@ -39,7 +39,6 @@
         android:src="@drawable/fab_plus_icon"
         app:borderWidth="0dp"
         app:elevation="6dp" />
-    <!--app:backgroundTint="@color/colorPrimaryDark"-->
 
 </android.support.design.widget.CoordinatorLayout>
 

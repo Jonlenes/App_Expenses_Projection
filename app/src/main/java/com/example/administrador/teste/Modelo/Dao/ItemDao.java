@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.administrador.teste.Modelo.Bo.DbHelper;
-import com.example.administrador.teste.Modelo.Vo.Categoria;
 import com.example.administrador.teste.Modelo.Vo.Item;
 
 import java.util.ArrayList;
@@ -84,20 +83,24 @@ public class ItemDao {
     }
 
     /*
-    somar o campo valor de todos os itens da cateria passado por parâmetro.
-    se a categoria for nulla, somar todos os itens
-    */
-    public Double somarValor(Categoria categoria) {
-        return 0.0;
-    }
-
-    /*
     Pega todos os itens, exceto aquele que estiver marcado como "pegar restante"
     Obs.: só exeiste um item marcado com "pegar restante" na base de dados e o
         mesmo é indentificado por ter valor = 0.
     */
-    public ArrayList<Item> getTodosNaoRestante(Categoria categoria) {
-        return null;
+    public ArrayList<Item> getTodosNaoRestante() {
+        String sql = "SELECT * FROM Item " +
+                "WHERE valor != 0.0";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        ArrayList<Item> list = new ArrayList<Item>();
+        while (cursor.moveToNext()) {
+            list.add(new Item(cursor.getLong(0),
+                    cursor.getLong(1),
+                    cursor.getString(2),
+                    cursor.getDouble(3),
+                    cursor.getDouble(4)));
+        }
+        return list;
     }
 
     /*
@@ -105,7 +108,18 @@ public class ItemDao {
     Obs.: considere que sempre haverá um item marcado como "pegar restante"
     */
     public Item getItemComRestanteAtivo() {
-        return null;
+        String sql = "SELECT * FROM Item " +
+                "WHERE valor = 0.0";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        cursor.moveToFirst();
+
+        return new Item(cursor.getLong(0),
+                cursor.getLong(1),
+                cursor.getString(2),
+                cursor.getDouble(3),
+                cursor.getDouble(4));
+
     }
 
     public Boolean contemPorDescricao(String descricao) {
