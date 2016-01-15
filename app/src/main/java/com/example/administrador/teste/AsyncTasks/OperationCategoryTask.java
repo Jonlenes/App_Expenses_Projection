@@ -19,9 +19,11 @@ public class OperationCategoryTask extends AsyncTask<Categoria, Void, Void> {
     private Context context;
     private AlertDialog dialog;
     private ProgressDialog progressDialog;
-    private String message;
+    private String exceptionMessage;
     private EnumOperation operation;
-
+    private String messageProgress[] = {"Inserindo categoria...",
+            "Atualizando categoria...",
+            "Deletando categoria"};
 
     public OperationCategoryTask(Context context, AlertDialog dialog, EnumOperation operation) {
         this.context = context;
@@ -29,7 +31,7 @@ public class OperationCategoryTask extends AsyncTask<Categoria, Void, Void> {
         this.operation = operation;
 
         progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Inserindo categoria...");
+        progressDialog.setMessage(messageProgress[operation.ordinal()]);
         progressDialog.setCancelable(false);
     }
 
@@ -51,7 +53,7 @@ public class OperationCategoryTask extends AsyncTask<Categoria, Void, Void> {
                     break;
             }
         } catch (ModelException e) {
-            message = e.getMessage();
+            exceptionMessage = e.getMessage();
         }
         return null;
     }
@@ -68,9 +70,9 @@ public class OperationCategoryTask extends AsyncTask<Categoria, Void, Void> {
         super.onPostExecute(aVoid);
 
         progressDialog.dismiss();
-        if (message != null && !message.isEmpty()) {
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-        } else {
+        if (exceptionMessage != null && !exceptionMessage.isEmpty()) {
+            Toast.makeText(context, exceptionMessage, Toast.LENGTH_LONG).show();
+        } else if (operation != EnumOperation.delete) {
             dialog.dismiss();
         }
 
