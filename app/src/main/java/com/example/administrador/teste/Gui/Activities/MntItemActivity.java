@@ -23,6 +23,8 @@ public class MntItemActivity extends Activity {
     private CheckBox checkBoxPegarRestante;
     private Long idCategoria;
 
+    private Item item;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +42,26 @@ public class MntItemActivity extends Activity {
         addItemButton.setOnClickListener(onClickListenerInserir);
         cancelButton.setOnClickListener(onClickListenerCancel);
         checkBoxPegarRestante.setOnCheckedChangeListener(onCheckedChangeListenerPegarRestante);
+
+        initFieldsActivity();
+    }
+
+    private void initFieldsActivity() {
+        if (getIntent().getLongExtra("id", -1) != -1) {
+
+            item = new Item(getIntent().getLongExtra("id", -1),
+                    getIntent().getLongExtra("idCategoria", -1),
+                    getIntent().getStringExtra("descrisao"),
+                    getIntent().getDoubleExtra("valor", -1),
+                    getIntent().getDoubleExtra("saldo", -1));
+
+            descricaoEditText.setText(item.getDescricao());
+            valorEditText.setText(String.valueOf(item.getValor()));
+            saldoInicialEditText.setText(String.valueOf(item.getSaldo()));
+            checkBoxPegarRestante.setChecked(item.getValor() == 0);
+
+            saldoInicialEditText.setEnabled(false);
+        }
     }
 
     private View.OnClickListener onClickListenerInserir = new View.OnClickListener() {
@@ -50,10 +72,23 @@ public class MntItemActivity extends Activity {
             } else if (valorEditText.getText().length() <= 0 && !checkBoxPegarRestante.isChecked()) {
                 valorEditText.setError("Preencha o valor.");
             } else {
-                new OperationItemTask(MntItemActivity.this, EnumOperation.insert).execute(new Item(MntItemActivity.this.idCategoria,
-                        descricaoEditText.getText().toString(),
-                        checkBoxPegarRestante.isChecked() ? 0 : Double.parseDouble(valorEditText.getText().toString()),
-                        saldoInicialEditText.getText().length() <= 0 ? 0 : Double.parseDouble(saldoInicialEditText.getText().toString())));
+                EnumOperation operation;
+
+                if (item != null) {
+                    //atualizo os atributos que podem ser alterados na tela
+                    item.setDescricao(descricaoEditText.getText().toString());
+                    item.setSaldo(checkBoxPegarRestante.isChecked() ? 0 : Double.parseDouble(valorEditText.getText().toString()));
+                    operation = EnumOperation.update;
+                } else {
+                    //crio um novo item
+                    item = new Item(MntItemActivity.this.idCategoria,
+                                    descricaoEditText.getText().toString(),
+                                    checkBoxPegarRestante.isChecked() ? 0 : Double.parseDouble(valorEditText.getText().toString()),
+                                    saldoInicialEditText.getText().length() <= 0 ? 0 : Double.parseDouble(saldoInicialEditText.getText().toString()));
+                    operation = EnumOperation.insert;
+                }
+
+                new OperationItemTask(MntItemActivity.this, operation).execute(item);
             }
         }
     };

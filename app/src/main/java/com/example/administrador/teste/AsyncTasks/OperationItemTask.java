@@ -16,16 +16,19 @@ import com.example.administrador.teste.Modelo.Vo.Item;
 public class OperationItemTask extends AsyncTask<Item, Void, Void> {
 
     private ProgressDialog progressDialog;
-    private String message;
+    private String messageException;
     private Activity activity;
     private EnumOperation operation;
+    private String messageProgress[] = {"Inserindo item...",
+            "Atualizando item...",
+            "Deletando item"};
 
     public OperationItemTask(Activity activity, EnumOperation operation) {
         this.activity = activity;
         this.operation = operation;
 
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Inserindo item...");
+        progressDialog.setMessage(messageProgress[operation.ordinal()]);
         progressDialog.setCancelable(false);
     }
 
@@ -48,7 +51,7 @@ public class OperationItemTask extends AsyncTask<Item, Void, Void> {
                     break;
             }
         } catch (ModelException e) {
-            message = e.getMessage();
+            messageException = e.getMessage();
         }
         return null;
     }
@@ -65,10 +68,10 @@ public class OperationItemTask extends AsyncTask<Item, Void, Void> {
         super.onPostExecute(aVoid);
 
         progressDialog.dismiss();
-        if (message == null || message.isEmpty()) {
+        if (messageException == null || messageException.isEmpty()) {
             activity.finish();
         } else {
-            Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, messageException, Toast.LENGTH_LONG).show();
         }
     }
 }

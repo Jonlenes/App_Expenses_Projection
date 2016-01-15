@@ -23,7 +23,30 @@ public class MainActivity extends Activity {
     private ListView listViewCategoria;
     private FloatingActionButton fabInserir;
     private AdapterListCategoria adapterListCategoria;
-    View.OnClickListener onClickListenerInserir = new View.OnClickListener() {
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        listViewCategoria = ((ListView) findViewById(R.id.categoriasListView));
+        fabInserir = (FloatingActionButton) findViewById(R.id.fabInserir);
+
+        listViewCategoria.setOnItemClickListener(onClickLista);
+        listViewCategoria.setOnItemLongClickListener(onItemLongClickListenerCategoria);
+        fabInserir.setOnClickListener(onClickListenerInserir);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        new SearchCategoryTask(this, listViewCategoria, adapterListCategoria).execute();
+    }
+
+    private  View.OnClickListener onClickListenerInserir = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             DialogMntCategory dialogInsertCategory = new DialogMntCategory(MainActivity.this, null);
@@ -113,27 +136,4 @@ public class MainActivity extends Activity {
             return true;
         }
     };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        listViewCategoria = ((ListView) findViewById(R.id.categoriasListView));
-        fabInserir = (FloatingActionButton) findViewById(R.id.fabInserir);
-
-        listViewCategoria.setOnItemClickListener(onClickLista);
-        listViewCategoria.setOnItemLongClickListener(onItemLongClickListenerCategoria);
-        fabInserir.setOnClickListener(onClickListenerInserir);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        new SearchCategoryTask(this, listViewCategoria, adapterListCategoria).execute();
-    }
-
-
 }
