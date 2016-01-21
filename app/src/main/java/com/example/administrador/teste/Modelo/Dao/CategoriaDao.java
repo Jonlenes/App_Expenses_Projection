@@ -31,9 +31,6 @@ public class CategoriaDao {
 
         contentValues.put("descricao", categoria.getDescricao());
         db.insert("Categoria", "Id", contentValues);
-
-        Log.i("Teste", "Isso foi inserido: " + categoria.getDescricao());
-        //Toast.makeText(, "Entrou no onclick", Toast.LENGTH_LONG).show();
     }
 
     public void altera(Categoria categoria){
@@ -47,7 +44,6 @@ public class CategoriaDao {
     }
 
     public ArrayList<Categoria> getTodos(){
-        //db.execSQL("DELETE FROM Categoria");
         String sql = "SELECT Categoria.*, SUM(Item.Saldo) AS Saldo FROM Categoria\n" +
                 "LEFT JOIN Item\n" +
                 "ON Categoria.id = Item.idCategoria\n" +
