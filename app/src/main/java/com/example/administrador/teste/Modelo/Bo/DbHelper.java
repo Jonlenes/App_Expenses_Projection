@@ -11,7 +11,7 @@ import com.example.administrador.teste.Modelo.Vo.User;
  */
 public class DbHelper extends SQLiteOpenHelper {
     private final static String NOME_BASE = "Financas";
-    private final static int VERSAO_BASE = 3;
+    private final static int VERSAO_BASE = 4;
     private static DbHelper ourInstance = null;
     private final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS ";
 
@@ -35,7 +35,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         createTableCategoria(db);
         createTableItens(db);
-        createTableUsuers(db);
+        createTableUsers(db);
+        createTableBanlAccount(db);
     }
 
     @Override
@@ -63,12 +64,23 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(sql);
     }
 
-    public void createTableUsuers(SQLiteDatabase db) {
+    public void createTableUsers(SQLiteDatabase db) {
         String sql = SQL_CREATE_TABLE + "User";
         sql += "( login VARCHAR(30) PRIMARY KEY, \n" +
                 "  password VARCHAR(30) NOT NULL,\n" +
                 "  email VARCHAR(50) NULL,\n" +
                 "  isConnected INTEGER NULL\n" +
+                ")";
+        db.execSQL(sql);
+    }
+
+    public void createTableBanlAccount(SQLiteDatabase db) {
+        String sql = SQL_CREATE_TABLE + "BankAccount";
+        sql += "( id INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
+                "  name VARCHAR(30) NOT NULL,\n" +
+                "  loginUser VARCHAR(30) NOT NULL,\n" +
+                "  saldo REAL NULL, \n" +
+                "  FOREIGN KEY(id) REFERENCES User(login)\n" +
                 ")";
         db.execSQL(sql);
     }
