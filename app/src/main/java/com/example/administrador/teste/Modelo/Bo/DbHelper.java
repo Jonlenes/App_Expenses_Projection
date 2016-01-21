@@ -4,14 +4,18 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.administrador.teste.Modelo.Vo.User;
+
 /**
  * Created by Administrador on 03/01/2016.
  */
 public class DbHelper extends SQLiteOpenHelper {
     private final static String NOME_BASE = "Financas";
-    private final static int VERSAO_BASE = 2;
+    private final static int VERSAO_BASE = 3;
     private static DbHelper ourInstance = null;
     private final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS ";
+
+    private User userActive;
 
     private DbHelper(Context context) {
         super(context, NOME_BASE, null, VERSAO_BASE);
@@ -31,6 +35,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         createTableCategoria(db);
         createTableItens(db);
+        createTableUsuers(db);
     }
 
     @Override
@@ -45,6 +50,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 ")";
         db.execSQL(sql);
     }
+
     public void createTableItens(SQLiteDatabase db){
         String sql = SQL_CREATE_TABLE + "Item";
         sql += "( id INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
@@ -55,5 +61,23 @@ public class DbHelper extends SQLiteOpenHelper {
                 "  FOREIGN KEY(idCategoria) REFERENCES Categoria(id)\n" +
                 ")";
         db.execSQL(sql);
+    }
+
+    public void createTableUsuers(SQLiteDatabase db) {
+        String sql = SQL_CREATE_TABLE + "User";
+        sql += "( login VARCHAR(30) PRIMARY KEY, \n" +
+                "  password VARCHAR(30) NOT NULL,\n" +
+                "  email VARCHAR(50) NULL,\n" +
+                "  isConnected INTEGER NULL\n" +
+                ")";
+        db.execSQL(sql);
+    }
+
+    public User getUserActive() {
+        return userActive;
+    }
+
+    public void setUserActive(User userActive) {
+        this.userActive = userActive;
     }
 }
