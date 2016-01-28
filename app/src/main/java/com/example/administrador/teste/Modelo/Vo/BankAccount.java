@@ -13,6 +13,10 @@ public class BankAccount {
     public BankAccount() {
     }
 
+    public BankAccount(String name) {
+        this.name = name;
+    }
+
     public BankAccount(String name, String loginUser, Double saldo) {
         this.name = name;
         this.loginUser = loginUser;

@@ -34,7 +34,6 @@ public class SearchCategoryTask extends AsyncTask<Void, Void, ArrayList<Categori
 
     @Override
     protected ArrayList<Categoria> doInBackground(Void... params) {
-        DbHelper.newInstance(activity);
         return new CategoriaBo().getTodos();
     }
 

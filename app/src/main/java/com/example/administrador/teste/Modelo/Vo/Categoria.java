@@ -13,6 +13,7 @@ public class Categoria {
     private Long id;
     private String descricao;
     private Double saldo;
+    private String loginUser;
 
     public Categoria() {
     }
@@ -21,10 +22,11 @@ public class Categoria {
         this.descricao = descricao;
     }
 
-    public Categoria(String descricao, Long id, Double saldo) {
-        this.descricao = descricao;
+    public Categoria(Long id, String descricao, Double saldo, String loginUser) {
         this.id = id;
+        this.descricao = descricao;
         this.saldo = saldo;
+        this.loginUser = loginUser;
     }
 
     public Long getId() {
@@ -51,8 +53,11 @@ public class Categoria {
         this.saldo = saldo;
     }
 
-    @Override
-    public String toString() {
-        return saldo + "\t\t\t" + descricao;
+    public String getLoginUser() {
+        return loginUser;
+    }
+
+    public void setLoginUser(String loginUser) {
+        this.loginUser = loginUser;
     }
 }

@@ -30,12 +30,13 @@ public class CategoriaDao {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put("descricao", categoria.getDescricao());
+        contentValues.put("loginUser", categoria.getLoginUser());
+
         db.insert("Categoria", "Id", contentValues);
     }
 
     public void altera(Categoria categoria){
         ContentValues contentValues = new ContentValues();
-
         contentValues.put("descricao", categoria.getDescricao());
         db.update("Categoria", contentValues, "id = " + categoria.getId(), null);
     }
@@ -43,27 +44,49 @@ public class CategoriaDao {
         db.delete("Categoria", "id = " + id, null);
     }
 
-    public ArrayList<Categoria> getTodos(){
+    public ArrayList<Categoria> getTodos(String loginUser) {
         String sql = "SELECT Categoria.*, SUM(Item.Saldo) AS Saldo FROM Categoria\n" +
                 "LEFT JOIN Item\n" +
                 "ON Categoria.id = Item.idCategoria\n" +
-                "GROUP BY(Categoria.id)\n" +
-                "ORDER BY(Categoria.descricao)";
+                "WHERE Categoria.loginUser = '" + loginUser + "'\n" +
+                "GROUP BY(Categoria.id)\n";
         Cursor cursor = db.rawQuery(sql, null);
 
         ArrayList list = new ArrayList();
         while (cursor.moveToNext()) {
-            list.add(new Categoria(cursor.getString(1),
-                    cursor.getLong(0),
-                    cursor.getDouble(2)));
+            list.add(new Categoria(cursor.getLong(0),
+                    cursor.getString(1),
+                    cursor.getDouble(3),
+                    cursor.getString(2)
+                    ));
         }
 
         return list;
     }
 
-    public Boolean contemPorDescricao(String descricao) {
+    public Boolean contemPorDescricao(String descricao, String loginUser) {
         String sql = "SELECT * FROM Categoria\n" +
-                "WHERE descricao = '" + descricao + "'";
+                "WHERE descricao = '" + descricao + "'\n" +
+                "   AND loginUser = '" + loginUser + "'";
         return  db.rawQuery(sql, null).moveToFirst();
+    }
+
+    public Categoria getCategoriaById(String loginUser, Long id) {
+        String sql = "SELECT Categoria.*, SUM(Item.Saldo) AS Saldo FROM Categoria\n" +
+                "LEFT JOIN Item\n" +
+                "ON Categoria.id = Item.idCategoria\n" +
+                "WHERE Categoria.loginUser = '" + loginUser + "'\n" +
+                "AND Categoria.id = " + id + "\n" +
+                "GROUP BY(Categoria.id)\n";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if (cursor.moveToFirst()) {
+            return new Categoria(cursor.getLong(0),
+                    cursor.getString(1),
+                    cursor.getDouble(3),
+                    cursor.getString(2));
+        }
+
+        return null;
     }
 }

@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,22 +23,31 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <!-- Include the AdActivity configChanges and theme. -->
         <activity
-            android:name=".Gui.Activities.MainActivity"
-            android:label="@string/app_name">
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity android:name=".Gui.Activities.MntItemActivity" />
+        <activity
+            android:name=".Gui.Activities.LoginActivity"
+            android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- Include the AdActivity configChanges and theme. -->
+        <activity android:name=".Gui.Activities.UserRegisterActivity" />
+        <activity android:name=".Gui.Activities.MntBankAccountActivity" />
         <activity
-            android:name="com.google.android.gms.ads.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:theme="@android:style/Theme.Translucent" />
-        <activity android:name=".Gui.Activities.ItemActivity" />
-        <activity android:name=".Gui.Activities.MntItemActivity"></activity>
+            android:name=".Gui.Activities.MainActivity"
+            android:label="@string/title_activity_auciliar"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Gui.Activities.ItemActivity"
+            android:label="@string/title_activity_item_activity_aa"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

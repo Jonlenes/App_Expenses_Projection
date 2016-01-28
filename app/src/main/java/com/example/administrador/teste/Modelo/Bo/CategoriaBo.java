@@ -7,6 +7,7 @@ import com.example.administrador.teste.Modelo.Vo.Item;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,54 +21,42 @@ public class CategoriaBo {
     }
 
     public void insert(Categoria categoria) throws ModelException {
-        if (categoriaDao.contemPorDescricao(categoria.getDescricao()))
+        String loginUser = DbHelper.getInstance().getUserActive().getLogin();
+
+        if (categoriaDao.contemPorDescricao(categoria.getDescricao(), loginUser))
             throw new ModelException("Já possui uma categoria com a mesma descrição.");
 
+        categoria.setLoginUser(loginUser);
         categoriaDao.insere(categoria);
     }
 
     public void altera(Categoria categoria) throws ModelException {
-        if (categoriaDao.contemPorDescricao(categoria.getDescricao()))
+        if (categoriaDao.contemPorDescricao(categoria.getDescricao(), categoria.getLoginUser()))
             throw new ModelException("Já possui uma categoria com a mesma descrição.");
 
         categoriaDao.altera(categoria);
     }
 
+    public Categoria getCategoriaById(Long id) {
+        return categoriaDao.getCategoriaById(DbHelper.getInstance().getUserActive().getLogin(), id);
+    }
+
     public void excluir(Categoria categoria) throws ModelException {
         ItemDao itemDao = new ItemDao();
-		Item itemRestante = itemDao.getItemComRestanteAtivo();
-		
-		//verifico se a categoria a ser deletada não possui item restante
-		if (itemRestante.getIdCategoria() == categoria.getId())
-			throw new ModelException("Não é possivel excluir uma categoria que possua um item marcado como restante.");
-		
-		//soma o saldo dos itens exluidos e excluiu os mesmos
-		ArrayList<Item> itens = itemDao.getTodosPorCategoria(categoria.getId());
-		Double saldo = 0.0;
-		for (Item item : itens) {
-			saldo += item.getSaldo();
-			itemDao.exclui(item.getId());
-		}
-		
-		//atualiza o item restante somando o saldo dos itens excluidos
-		itemRestante.setSaldo(itemRestante.getSaldo() + saldo);
-		itemDao.altera(itemRestante);
-		
-		//finalmente, excluir a categoria
+
+        List<Item> items = itemDao.getTodosPorCategoria(categoria.getId());
+        for (Item item : items) {
+            itemDao.exclui(item.getId());
+        }
         categoriaDao.exclui(categoria.getId());
     }
 
     public ArrayList<Categoria> getTodos() {
-        try {
-            return categoriaDao.getTodos();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return categoriaDao.getTodos(DbHelper.getInstance().getUserActive().getLogin());
     }
 
 
-    public Map<Categoria, ArrayList<Item>> getCategoriasComItens() {
+    /*public Map<Categoria, ArrayList<Item>> getCategoriasComItens() {
         ArrayList<Categoria> categoriaArrayList = categoriaDao.getTodos();
 
         Map<Categoria, ArrayList<Item>> listMap = new HashMap<>();
@@ -78,5 +67,5 @@ public class CategoriaBo {
         }
 
         return listMap;
-    }
+    }*/
 }

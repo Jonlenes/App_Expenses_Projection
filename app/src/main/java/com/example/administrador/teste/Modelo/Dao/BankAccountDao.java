@@ -62,4 +62,16 @@ public class BankAccountDao {
 
         return list;
     }
+
+    public Boolean userHaveBankAccount(String login) {
+        String sql = "SELECT * FROM BankAccount\n" +
+                "WHERE loginUser = '" + login + "'";
+        return  db.rawQuery(sql, null).moveToNext();
+    }
+
+    public Boolean containByName(String name) {
+        String sql = "SELECT * FROM BankAccount\n" +
+                "WHERE name = '" + name + "'";
+        return  db.rawQuery(sql, null).moveToNext();
+    }
 }

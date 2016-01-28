@@ -103,9 +103,6 @@ public class ContaBo {
             i.setSaldo(i.getSaldo() + i.getValor());
             itemDao.altera(item);
         }
-        Item itemComRestante = itemDao.getItemComRestanteAtivo();
-        itemComRestante.setSaldo(itemComRestante.getSaldo() + (value - valorNecessario));
-        itemDao.altera(itemComRestante);
 
         return;
     }

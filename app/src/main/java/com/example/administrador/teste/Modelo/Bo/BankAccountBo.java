@@ -15,7 +15,12 @@ public class BankAccountBo {
         bankAccountDao = new BankAccountDao();
     }
 
-    public void inserir(BankAccount bankAccount) {
+    public void inserir(BankAccount bankAccount) throws ModelException {
+        if (bankAccountDao.containByName(bankAccount.getName()))
+            throw new ModelException("Já existe uma conta bancária com esse nome.");
+
+        bankAccount.setLoginUser(DbHelper.getInstance().getUserActive().getLogin());
+        bankAccount.setSaldo(0.0);
         bankAccountDao.insert(bankAccount);
     }
 
@@ -29,5 +34,9 @@ public class BankAccountBo {
 
     public List<BankAccount> getBankAccountUser() {
         return  bankAccountDao.getBankAccount(DbHelper.getInstance().getUserActive().getLogin());
+    }
+
+    public Boolean userHaveBankAccount() {
+        return bankAccountDao.userHaveBankAccount(DbHelper.getInstance().getUserActive().getLogin());
     }
 }

@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 import com.example.administrador.teste.AsyncTasks.OperationCategoryTask;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
-import com.example.administrador.teste.Modelo.Vo.EnumOperation;
+import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperation;
 import com.example.administrador.teste.R;
 
 /**
@@ -28,7 +28,7 @@ public class DialogMntCategory extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_insert_category);
+        setContentView(R.layout.dialog_mnt_category);
         setCancelable(false);
 
         descricaoEditText = ((EditText) findViewById(R.id.descricaoInsertCategoriaEditText));

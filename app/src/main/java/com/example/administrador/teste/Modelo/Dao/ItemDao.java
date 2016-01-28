@@ -32,6 +32,7 @@ public class ItemDao {
         contentValues.put("descricao", item.getDescricao());
         contentValues.put("valor", item.getValor());
         contentValues.put("saldo", item.getSaldo());
+        contentValues.put("idBankAccount", item.getIdBankAccount());
 
         db.insert("Item", "Id", contentValues);
     }
@@ -43,6 +44,7 @@ public class ItemDao {
         contentValues.put("descricao", item.getDescricao());
         contentValues.put("valor", item.getValor());
         contentValues.put("saldo", item.getSaldo());
+        //contentValues.put("idBankAccount", item.getIdBankAccount());
 
         db.update("Item", contentValues, "id = " + item.getId(), null);
     }
@@ -50,8 +52,9 @@ public class ItemDao {
         db.delete("Item", "id = " + id, null);
     }
 
-    public ArrayList<Item> getTodos(){
-        String sql = "SELECT * FROM Item";
+    public ArrayList<Item> getTodos(Long idBankAccount){
+        String sql = "SELECT * FROM Item \n" +
+                "WHERE idBankAccount = " + idBankAccount;
         Cursor cursor = db.rawQuery(sql, null);
 
         ArrayList<Item> list = new ArrayList<Item>();
@@ -60,7 +63,8 @@ public class ItemDao {
                     cursor.getLong(1),
                     cursor.getString(2),
                     cursor.getDouble(3),
-                    cursor.getDouble(4)));
+                    cursor.getDouble(4),
+                    cursor.getLong(5)));
         }
 
         return list;
@@ -77,54 +81,18 @@ public class ItemDao {
                     cursor.getLong(1),
                     cursor.getString(2),
                     cursor.getDouble(3),
-                    cursor.getDouble(4)));
+                    cursor.getDouble(4),
+                    cursor.getLong(5)));
         }
         return list;
     }
 
-    /*
-    Pega todos os itens, exceto aquele que estiver marcado como "pegar restante"
-    Obs.: só exeiste um item marcado com "pegar restante" na base de dados e o
-        mesmo é indentificado por ter valor = 0.
-    */
-    public ArrayList<Item> getTodosNaoRestante() {
-        String sql = "SELECT * FROM Item " +
-                "WHERE valor != 0.0";
-        Cursor cursor = db.rawQuery(sql, null);
-
-        ArrayList<Item> list = new ArrayList<Item>();
-        while (cursor.moveToNext()) {
-            list.add(new Item(cursor.getLong(0),
-                    cursor.getLong(1),
-                    cursor.getString(2),
-                    cursor.getDouble(3),
-                    cursor.getDouble(4)));
-        }
-        return list;
-    }
-
-    /*
-    Pega somente o item marcado como "pegar restante"
-    Obs.: considere que sempre haverá um item marcado como "pegar restante"
-    */
-    public Item getItemComRestanteAtivo() {
-        String sql = "SELECT * FROM Item " +
-                "WHERE valor = 0.0";
-        Cursor cursor = db.rawQuery(sql, null);
-
-        cursor.moveToFirst();
-
-        return new Item(cursor.getLong(0),
-                cursor.getLong(1),
-                cursor.getString(2),
-                cursor.getDouble(3),
-                cursor.getDouble(4));
-
-    }
-
-    public Boolean contemPorDescricao(String descricao) {
+    public Boolean contemPorDescricao(String descricao, String userLogin) {
         String sql = "SELECT * FROM Item\n" +
-                "WHERE descricao = '" + descricao + "'";
+                "INNER JOIN BankAccount \n" +
+                "  ON BankAccount.id = Item.idBankAccount\n" +
+                "WHERE Item.descricao = '" + descricao + "'\n" +
+                "  AND BankAccount.loginUser = '" + userLogin + "'";
         return  db.rawQuery(sql, null).moveToFirst();
     }
 }

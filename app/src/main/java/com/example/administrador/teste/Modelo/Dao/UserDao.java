@@ -29,7 +29,7 @@ public class UserDao {
         contentValues.put("login", user.getLogin());
         contentValues.put("password", user.getPassword());
         contentValues.put("email", user.getEmail());
-        contentValues.put("isConnected", user.getIsConnected());
+        contentValues.put("isConnected", user.getIsConnected()? 1 : 0);
 
         db.insert("User", null, contentValues);
     }
@@ -39,13 +39,26 @@ public class UserDao {
 
         contentValues.put("password", user.getPassword());
         contentValues.put("email", user.getEmail());
-        contentValues.put("isConnected", user.getIsConnected());
+        contentValues.put("isConnected", user.getIsConnected()? 1 : 0);
 
-        db.update("User", contentValues, "login = " + user.getLogin(), null);
+        db.update("User", contentValues, "login = '" + user.getLogin() + "'", null);
     }
 
     public User getUser(String login) {
         Cursor cursor = db.rawQuery("SELECT * FROM User WHERE login = '" + login + "'", null);
+
+        if (cursor.moveToNext()) {
+            return new User(cursor.getString(EnumUser.login.ordinal()),
+                    cursor.getString(EnumUser.password.ordinal()),
+                    cursor.getString(EnumUser.email.ordinal()),
+                    cursor.getInt(EnumUser.isConnected.ordinal()) == 1 ? Boolean.TRUE : Boolean.FALSE);
+        }
+
+        return null;
+    }
+
+    public User getUserConnected() {
+        Cursor cursor = db.rawQuery("SELECT * FROM User WHERE isConnected = 1", null);
 
         if (cursor.moveToNext()) {
             return new User(cursor.getString(EnumUser.login.ordinal()),

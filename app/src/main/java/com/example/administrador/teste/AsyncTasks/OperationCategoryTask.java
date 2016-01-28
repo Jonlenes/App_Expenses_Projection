@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.example.administrador.teste.Modelo.Bo.CategoriaBo;
 import com.example.administrador.teste.Modelo.Bo.ModelException;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
-import com.example.administrador.teste.Modelo.Vo.EnumOperation;
+import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperation;
 
 /**
  * Created by Jonlenes on 06/01/2016.

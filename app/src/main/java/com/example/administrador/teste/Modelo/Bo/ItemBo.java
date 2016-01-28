@@ -1,9 +1,12 @@
 package com.example.administrador.teste.Modelo.Bo;
 
+import com.example.administrador.teste.Modelo.Dao.BankAccountDao;
 import com.example.administrador.teste.Modelo.Dao.ItemDao;
+import com.example.administrador.teste.Modelo.Vo.BankAccount;
 import com.example.administrador.teste.Modelo.Vo.Item;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrador on 04/01/2016.
@@ -16,14 +19,20 @@ public class ItemBo {
     }
 
     public void insert(Item item) throws ModelException {
-        if (itemDao.contemPorDescricao(item.getDescricao()))
+        if (itemDao.contemPorDescricao(item.getDescricao(), DbHelper.getInstance().getUserActive().getLogin()))
             throw new ModelException("Já possui um item com a mesma descrição.");
 
+        List<BankAccount> accounts =  new BankAccountBo().getBankAccountUser();
+        //Pegar apenas a primeira conta é temporário
+
+        //verificar saldo da conta
+
+        item.setIdBankAccount(accounts.get(0).getId());
         itemDao.insere(item);
     }
 
     public void altera(Item item) throws ModelException {
-        if (itemDao.contemPorDescricao(item.getDescricao()))
+        if (itemDao.contemPorDescricao(item.getDescricao(), DbHelper.getInstance().getUserActive().getLogin()))
             throw new ModelException("Já possui um item com a mesma descrição.");
 
         itemDao.altera(item);
@@ -31,15 +40,13 @@ public class ItemBo {
     }
 
     public void excluir(Item item) throws ModelException {
-        if (itemDao.getItemComRestanteAtivo().getId() == item.getId())
-            throw new ModelException("Esse item é restante e não pode ser excluido");
-
         itemDao.exclui(item.getId());
     }
 
     public ArrayList<Item> getTodos() {
         try {
-            return itemDao.getTodos();
+            List<BankAccount> accounts =  new BankAccountBo().getBankAccountUser();
+            return itemDao.getTodos(accounts.get(0).getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,6 +55,7 @@ public class ItemBo {
 
     public ArrayList<Item> getTodosPorCategoria(Long idCategoria) {
         try {
+            List<BankAccount> accounts =  new BankAccountBo().getBankAccountUser();
             return itemDao.getTodosPorCategoria(idCategoria);
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,7 +63,7 @@ public class ItemBo {
         return null;
     }
 	
-	public void transferirSaldo(Item itemSaida, Item itemEntrada, Double valor) throws ModelException {
+	/*public void transferirSaldo(Item itemSaida, Item itemEntrada, Double valor) throws ModelException {
 		if (itemSaida.getSaldo() < valor)  throw new ModelException("Saldo insuficiente.");
 		
 		itemEntrada.setSaldo(itemEntrada.getSaldo() + valor);
@@ -66,5 +74,5 @@ public class ItemBo {
 		itemDao.altera(itemSaida);
 		//commit
 		
-	}
+	}*/
 }

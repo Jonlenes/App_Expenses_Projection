@@ -20,9 +20,10 @@ public class UserBo {
         }
 
         userDao.insert(user);
+        login(user.getLogin(), user.getPassword(), user.getIsConnected());
     }
 
-    public void update(User user) throws ModelException {
+    public void update(User user) {
         userDao.update(user);
     }
 
@@ -31,7 +32,7 @@ public class UserBo {
             throw new ModelException("Usuário ou senha incorretos");
 
         User user = userDao.getUser(login);
-        if (isConnected) {
+        if (user != null && isConnected) {
             user.setIsConnected(Boolean.TRUE);
             userDao.update(user);
         }
@@ -41,7 +42,7 @@ public class UserBo {
     public void logout() {
         User user = DbHelper.getInstance().getUserActive();
 
-        if (user.getIsConnected()) {
+        if (user != null && user.getIsConnected()) {
             user.setIsConnected(Boolean.FALSE);
             userDao.update(user);
         }
@@ -49,13 +50,12 @@ public class UserBo {
         DbHelper.getInstance().setUserActive(null);
     }
 
-    public Boolean userIsConnected(String login) {
-        if (login != null && !login.isEmpty()) {
-            User user = userDao.getUser(login);
-            if (user.getIsConnected()) {
-                DbHelper.getInstance().setUserActive(user);
-                return true;
-            }
+    public Boolean userIsConnected() {
+        User user = userDao.getUserConnected();
+
+        if (user != null) {
+            DbHelper.getInstance().setUserActive(user);
+            return true;
         }
         return false;
     }

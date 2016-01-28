@@ -15,8 +15,17 @@ public class Item {
     private String descricao;
     private Double valor;
     private Double saldo;
+    private Long idBankAccount;
 
     public Item() {
+    }
+
+    public Item(Long idCategoria, String descricao, Double valor, Double saldo, Long idBankAccount) {
+        this.idCategoria = idCategoria;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.saldo = saldo;
+        this.idBankAccount = idBankAccount;
     }
 
     public Item(Long idCategoria, String descricao, Double valor, Double saldo) {
@@ -32,6 +41,15 @@ public class Item {
         this.descricao = descricao;
         this.valor = valor;
         this.saldo = saldo;
+    }
+
+    public Item(Long id, Long idCategoria, String descricao, Double valor, Double saldo, Long idBankAccount) {
+        this.id = id;
+        this.idCategoria = idCategoria;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.saldo = saldo;
+        this.idBankAccount = idBankAccount;
     }
 
     public Long getId() {
@@ -73,6 +91,12 @@ public class Item {
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
-    
-    
+
+    public Long getIdBankAccount() {
+        return idBankAccount;
+    }
+
+    public void setIdBankAccount(Long idBankAccount) {
+        this.idBankAccount = idBankAccount;
+    }
 }

@@ -5,27 +5,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.administrador.teste.AsyncTasks.OperationCategoryTask;
 import com.example.administrador.teste.AsyncTasks.OperationItemTask;
-import com.example.administrador.teste.AsyncTasks.SearchCategoryTask;
 import com.example.administrador.teste.AsyncTasks.SearchItemTask;
 import com.example.administrador.teste.Gui.AdapterListView.AdapterListItem;
-import com.example.administrador.teste.Gui.Dialogs.DialogMntCategory;
-import com.example.administrador.teste.Modelo.Vo.Categoria;
-import com.example.administrador.teste.Modelo.Vo.EnumOperation;
+import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperation;
 import com.example.administrador.teste.Modelo.Vo.Item;
 import com.example.administrador.teste.R;
 
 public class ItemActivity extends AppCompatActivity {
 
     private ListView listView;
-    private FloatingActionButton fabInserirItem;
     private AdapterListItem adapterListItem;
     private Long idCategoria;
 
@@ -33,13 +30,13 @@ public class ItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         idCategoria = getIntent().getLongExtra("Id", -1);
         listView = ((ListView) findViewById(R.id.itensListView));
-        fabInserirItem = (FloatingActionButton) findViewById(R.id.fabInserirItem);
 
         listView.setOnItemLongClickListener(onItemLongClickListenerItem);
-        fabInserirItem.setOnClickListener(onClickListenerAddItem);
+        findViewById(R.id.fabInserirItem).setOnClickListener(onClickListenerAddItem);
 
         if (idCategoria != -1) {
             new SearchItemTask(this, listView, adapterListItem).execute(idCategoria);
@@ -105,7 +102,7 @@ public class ItemActivity extends AppCompatActivity {
                                                     .setOnDismissListener(new DialogInterface.OnDismissListener() {
                                                         @Override
                                                         public void onDismiss(DialogInterface dialog) {
-                                                            new SearchItemTask(ItemActivity.this, listView, adapterListItem).execute();
+                                                            new SearchItemTask(ItemActivity.this, listView, adapterListItem).execute(idCategoria);
                                                         }
                                                     });
                                             dialogDelete
@@ -121,4 +118,5 @@ public class ItemActivity extends AppCompatActivity {
             return true;
         }
     };
+
 }
