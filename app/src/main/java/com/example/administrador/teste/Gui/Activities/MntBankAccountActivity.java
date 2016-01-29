@@ -19,16 +19,25 @@ public class MntBankAccountActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     private String nameBankAccout;
+    private Boolean isOnlyAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mnt_bank_account);
 
-        ((Button) findViewById(R.id.nextButtonBankAccount)).setOnClickListener(onClickListenerNext);
+        isOnlyAdd = getIntent().getBooleanExtra("isOnlyAdd", false);
+        Button nextButtonBankAccount = (Button) findViewById(R.id.nextButtonBankAccount);
+        nextButtonBankAccount.setOnClickListener(onClickListenerNext);
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Inserindo conta bancária...");
+
+        if (isOnlyAdd) {
+            nextButtonBankAccount.setText("OK");
+        }
+
     }
 
     private View.OnClickListener onClickListenerNext = new View.OnClickListener() {
@@ -77,7 +86,7 @@ public class MntBankAccountActivity extends AppCompatActivity {
             if (exceptionMessage != null && !exceptionMessage.isEmpty()) {
                 Toast.makeText(MntBankAccountActivity.this, exceptionMessage, Toast.LENGTH_LONG).show();
             } else {
-                startActivity(new Intent(MntBankAccountActivity.this, MainActivity.class));
+                if (!isOnlyAdd) startActivity(new Intent(MntBankAccountActivity.this, MainActivity.class));
                 finish();
             }
 
