@@ -11,7 +11,7 @@ import com.example.administrador.teste.Modelo.Vo.User;
  */
 public class DbHelper extends SQLiteOpenHelper {
     private final static String NOME_BASE = "Financas";
-    private final static int VERSAO_BASE = 8;
+    private final static int VERSAO_BASE = 9;
     private static DbHelper ourInstance = null;
     private final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS ";
 
@@ -87,7 +87,8 @@ public class DbHelper extends SQLiteOpenHelper {
         sql += "( id INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
                 "  name VARCHAR(30) NOT NULL,\n" +
                 "  loginUser VARCHAR(30) NOT NULL,\n" +
-                "  saldo REAL NULL, \n" +
+                "  saldoCorrente REAL NULL, \n" +
+                "  saldoPoupanca REAL NULL, \n" +
                 "  FOREIGN KEY(loginUser) REFERENCES User(login)\n" +
                 ")";
         db.execSQL(sql);

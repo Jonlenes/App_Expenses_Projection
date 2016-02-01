@@ -42,4 +42,12 @@
     <string name="action_exit">Sair</string>
     <string name="title_activity_item_activity_aa">ItemActivityAAA</string>
 
+    <string name="action_depositar_bank_account">Depositar</string>
+    <string name="action_sacar_bank_account">Sacar</string>
+
+    <string-array name="itens_type_bank_account">
+        <item>Corrente</item>
+        <item>Poupança</item>
+    </string-array>
+
 </resources>

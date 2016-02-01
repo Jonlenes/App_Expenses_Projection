@@ -47,7 +47,8 @@
         <activity
             android:name=".Gui.Activities.ItemActivity"
             android:label="@string/title_activity_item_activity_aa"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Gui.Activities.ResumeBanckAccountActivity"></activity>
     </application>
 
 </manifest>

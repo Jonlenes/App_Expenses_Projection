@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.example.administrador.teste.Modelo.Bo.ModelException;
 import com.example.administrador.teste.Modelo.Bo.UserBo;
-import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperation;
 import com.example.administrador.teste.Modelo.Vo.User;
 import com.example.administrador.teste.R;
 

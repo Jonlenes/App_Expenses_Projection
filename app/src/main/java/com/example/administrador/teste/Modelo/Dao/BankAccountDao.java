@@ -33,14 +33,20 @@ public class BankAccountDao {
 
         contentValues.put("name", bankAccount.getName());
         contentValues.put("loginUser", DbHelper.getInstance().getUserActive().getLogin());
+        contentValues.put("saldoCorrente", bankAccount.getSaldoCorrente());
+        contentValues.put("saldoPoupanca", bankAccount.getSaldoPoupanca());
 
         db.insert("BankAccount", "Id", contentValues);
     }
 
     public void update(BankAccount bankAccount) {
         ContentValues contentValues = new ContentValues();
+
         contentValues.put("name", bankAccount.getName());
-        db.update("Item", contentValues, "id = " + bankAccount.getId(), null);
+        contentValues.put("saldoCorrente", bankAccount.getSaldoCorrente());
+        contentValues.put("saldoPoupanca", bankAccount.getSaldoPoupanca());
+
+        db.update("BankAccount", contentValues, "id = " + bankAccount.getId(), null);
     }
 
     public void delete(Long id){
@@ -57,7 +63,8 @@ public class BankAccountDao {
             list.add(new BankAccount(cursor.getLong(EnumBackAccount.id.ordinal()),
                     cursor.getString(EnumBackAccount.name.ordinal()),
                     cursor.getString(EnumBackAccount.loginUser.ordinal()),
-                    cursor.getDouble(EnumBackAccount.name.ordinal())));
+                    cursor.getDouble(EnumBackAccount.saldoCorrente.ordinal()),
+                    cursor.getDouble(EnumBackAccount.saldoPoupanca.ordinal())));
         }
 
         return list;
@@ -73,5 +80,25 @@ public class BankAccountDao {
         String sql = "SELECT * FROM BankAccount\n" +
                 "WHERE name = '" + name + "'";
         return  db.rawQuery(sql, null).moveToNext();
+    }
+
+    public BankAccount getBankAccount(Long id){
+        String sql = "SELECT BankAccount.*, SUM(Item.saldo) AS saldoProjetado FROM BankAccount\n" +
+                "LEFT JOIN Item\n" +
+                "ON BankAccount.id = Item.idBankAccount\n" +
+                "WHERE BankAccount.id = " + id + "\n" +
+                "GROUP BY (BankAccount.id)\n";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if (cursor.moveToNext()) {
+            return new BankAccount(cursor.getLong(EnumBackAccount.id.ordinal()),
+                    cursor.getString(EnumBackAccount.name.ordinal()),
+                    cursor.getString(EnumBackAccount.loginUser.ordinal()),
+                    cursor.getDouble(EnumBackAccount.saldoCorrente.ordinal()),
+                    cursor.getDouble(EnumBackAccount.saldoPoupanca.ordinal()),
+                    cursor.getDouble(EnumBackAccount.saldoProjetado.ordinal()));
+        }
+
+        return null;
     }
 }

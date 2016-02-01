@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -16,7 +14,7 @@ import android.widget.Toast;
 import com.example.administrador.teste.AsyncTasks.OperationItemTask;
 import com.example.administrador.teste.AsyncTasks.SearchItemTask;
 import com.example.administrador.teste.Gui.AdapterListView.AdapterListItem;
-import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperation;
+import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperationBd;
 import com.example.administrador.teste.Modelo.Vo.Item;
 import com.example.administrador.teste.R;
 
@@ -94,7 +92,7 @@ public class ItemActivity extends AppCompatActivity {
                                                     .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
-                                                            new OperationItemTask(ItemActivity.this, EnumOperation.delete).execute((Item) parent.getItemAtPosition(position));
+                                                            new OperationItemTask(ItemActivity.this, EnumOperationBd.delete).execute((Item) parent.getItemAtPosition(position));
                                                         }
                                                     })
                                                     .create();

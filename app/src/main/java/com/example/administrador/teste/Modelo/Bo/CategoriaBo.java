@@ -55,17 +55,8 @@ public class CategoriaBo {
         return categoriaDao.getTodos(DbHelper.getInstance().getUserActive().getLogin());
     }
 
+    public Map<String, Double> getAllByBankAccout(Long idBankAccout) {
+        return categoriaDao.getAllByBankAccout(idBankAccout);
+    }
 
-    /*public Map<Categoria, ArrayList<Item>> getCategoriasComItens() {
-        ArrayList<Categoria> categoriaArrayList = categoriaDao.getTodos();
-
-        Map<Categoria, ArrayList<Item>> listMap = new HashMap<>();
-        ItemDao itemDao = new ItemDao();
-        for (Categoria categoria : categoriaArrayList) {
-            ArrayList<Item> items = itemDao.getTodosPorCategoria(categoria.getId());
-            listMap.put(categoria, items);
-        }
-
-        return listMap;
-    }*/
 }

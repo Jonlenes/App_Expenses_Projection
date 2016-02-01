@@ -69,7 +69,7 @@ public class MntBankAccountActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... params) {
             try {
-                new BankAccountBo().inserir(new BankAccount(params[0]));
+                new BankAccountBo().insert(new BankAccount(params[0]));
             } catch (ModelException e) {
                 e.printStackTrace();
                 exceptionMessage = e.getMessage();

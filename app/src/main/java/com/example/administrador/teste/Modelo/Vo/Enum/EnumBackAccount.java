@@ -7,5 +7,7 @@ public enum EnumBackAccount {
     id,
     name,
     loginUser,
-    saldo
+    saldoCorrente,
+    saldoPoupanca,
+    saldoProjetado
 }

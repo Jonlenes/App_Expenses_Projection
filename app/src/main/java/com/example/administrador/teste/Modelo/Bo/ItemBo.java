@@ -19,7 +19,7 @@ public class ItemBo {
     }
 
     public void insert(Item item) throws ModelException {
-        if (itemDao.contemPorDescricao(item.getDescricao(), DbHelper.getInstance().getUserActive().getLogin()))
+        if (itemDao.contemPorDescricao(-1l, item.getDescricao(), DbHelper.getInstance().getUserActive().getLogin()))
             throw new ModelException("Já possui um item com a mesma descrição.");
 
         List<BankAccount> accounts =  new BankAccountBo().getBankAccountUser();
@@ -32,7 +32,7 @@ public class ItemBo {
     }
 
     public void altera(Item item) throws ModelException {
-        if (itemDao.contemPorDescricao(item.getDescricao(), DbHelper.getInstance().getUserActive().getLogin()))
+        if (itemDao.contemPorDescricao(item.getId(), item.getDescricao(), DbHelper.getInstance().getUserActive().getLogin()))
             throw new ModelException("Já possui um item com a mesma descrição.");
 
         itemDao.altera(item);
@@ -43,10 +43,9 @@ public class ItemBo {
         itemDao.exclui(item.getId());
     }
 
-    public ArrayList<Item> getTodos() {
+    public ArrayList<Item> getAll(Long idBankAccount) {
         try {
-            List<BankAccount> accounts =  new BankAccountBo().getBankAccountUser();
-            return itemDao.getTodos(accounts.get(0).getId());
+            return itemDao.getTodos(idBankAccount);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,7 +54,6 @@ public class ItemBo {
 
     public ArrayList<Item> getTodosPorCategoria(Long idCategoria) {
         try {
-            List<BankAccount> accounts =  new BankAccountBo().getBankAccountUser();
             return itemDao.getTodosPorCategoria(idCategoria);
         } catch (Exception e) {
             e.printStackTrace();

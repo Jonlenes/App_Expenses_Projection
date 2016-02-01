@@ -20,7 +20,7 @@ public class UserBo {
         }
 
         userDao.insert(user);
-        login(user.getLogin(), user.getPassword(), user.getIsConnected());
+        DbHelper.getInstance().setUserActive(user);
     }
 
     public void update(User user) {

@@ -8,7 +8,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.example.administrador.teste.AsyncTasks.OperationItemTask;
-import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperation;
+import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperationBd;
 import com.example.administrador.teste.Modelo.Vo.Item;
 import com.example.administrador.teste.R;
 
@@ -66,20 +66,20 @@ public class MntItemActivity extends Activity {
             } else if (valorEditText.getText().length() <= 0) {
                 valorEditText.setError("Preencha o valor.");
             } else {
-                EnumOperation operation;
+                EnumOperationBd operation;
 
                 if (item != null) {
                     //atualizo os atributos que podem ser alterados na tela
                     item.setDescricao(descricaoEditText.getText().toString());
                     item.setSaldo(Double.parseDouble(valorEditText.getText().toString()));
-                    operation = EnumOperation.update;
+                    operation = EnumOperationBd.update;
                 } else {
                     //crio um novo item
                     item = new Item(MntItemActivity.this.idCategoria,
                                     descricaoEditText.getText().toString(),
                                     Double.parseDouble(valorEditText.getText().toString()),
                                     Double.parseDouble(saldoInicialEditText.getText().toString()));
-                    operation = EnumOperation.insert;
+                    operation = EnumOperationBd.insert;
                 }
 
                 new OperationItemTask(MntItemActivity.this, operation).execute(item);

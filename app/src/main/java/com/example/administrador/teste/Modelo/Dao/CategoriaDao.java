@@ -14,6 +14,8 @@ import com.example.administrador.teste.Modelo.Bo.DbHelper;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -88,5 +90,21 @@ public class CategoriaDao {
         }
 
         return null;
+    }
+
+    public Map<String, Double> getAllByBankAccout(Long idBankAccount) {
+        String sql = "SELECT Categoria.id, Categoria.descricao, SUM(Item.saldo) AS valor  FROM Item\n" +
+                "INNER JOIN Categoria\n" +
+                "ON Categoria.id = Item.idCategoria\n" +
+                "WHERE Item.idBankAccount = " + idBankAccount + "\n" +
+                "GROUP BY(Item.idCategoria)";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        Map<String, Double> mapPercent = new HashMap<String, Double>();
+        while (cursor.moveToNext()) {
+            mapPercent.put(cursor.getString(1),
+                    cursor.getDouble(2));
+        }
+        return mapPercent;
     }
 }

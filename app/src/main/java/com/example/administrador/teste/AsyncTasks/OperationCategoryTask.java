@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.example.administrador.teste.Modelo.Bo.CategoriaBo;
 import com.example.administrador.teste.Modelo.Bo.ModelException;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
-import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperation;
+import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperationBd;
 
 /**
  * Created by Jonlenes on 06/01/2016.
@@ -20,12 +20,12 @@ public class OperationCategoryTask extends AsyncTask<Categoria, Void, Void> {
     private AlertDialog dialog;
     private ProgressDialog progressDialog;
     private String exceptionMessage;
-    private EnumOperation operation;
+    private EnumOperationBd operation;
     private String messageProgress[] = {"Inserindo categoria...",
             "Atualizando categoria...",
             "Deletando categoria"};
 
-    public OperationCategoryTask(Context context, AlertDialog dialog, EnumOperation operation) {
+    public OperationCategoryTask(Context context, AlertDialog dialog, EnumOperationBd operation) {
         this.context = context;
         this.dialog = dialog;
         this.operation = operation;
@@ -71,8 +71,9 @@ public class OperationCategoryTask extends AsyncTask<Categoria, Void, Void> {
 
         progressDialog.dismiss();
         if (exceptionMessage != null && !exceptionMessage.isEmpty()) {
+            dialog.show();
             Toast.makeText(context, exceptionMessage, Toast.LENGTH_LONG).show();
-        } else if (operation != EnumOperation.delete) {
+        } else if (operation != EnumOperationBd.delete) {
             dialog.dismiss();
         }
 

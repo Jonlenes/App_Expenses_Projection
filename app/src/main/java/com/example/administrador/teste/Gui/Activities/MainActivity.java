@@ -1,13 +1,13 @@
 package com.example.administrador.teste.Gui.Activities;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.preference.DialogPreference;
 import android.support.design.widget.FloatingActionButton;
 import android.view.SubMenu;
 import android.view.View;
@@ -19,8 +19,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrador.teste.AsyncTasks.OperationCategoryTask;
@@ -28,10 +32,12 @@ import com.example.administrador.teste.AsyncTasks.SearchCategoryTask;
 import com.example.administrador.teste.Gui.AdapterListView.AdapterListCategoria;
 import com.example.administrador.teste.Gui.Dialogs.DialogMntCategory;
 import com.example.administrador.teste.Modelo.Bo.BankAccountBo;
+import com.example.administrador.teste.Modelo.Bo.DbHelper;
 import com.example.administrador.teste.Modelo.Bo.UserBo;
 import com.example.administrador.teste.Modelo.Vo.BankAccount;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
-import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperation;
+import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperationBd;
+import com.example.administrador.teste.Modelo.Vo.User;
 import com.example.administrador.teste.R;
 
 import java.util.List;
@@ -39,12 +45,14 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private ProgressDialog progressDialog;
     private ListView listViewCategoria;
     private FloatingActionButton fabInserir;
     private AdapterListCategoria adapterListCategoria;
     private NavigationView navigationView;
     private List<BankAccount> listBankAccount;
     private boolean updateItensMenu;
+    private SubMenu subMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +64,14 @@ public class MainActivity extends AppCompatActivity
         listViewCategoria = ((ListView) findViewById(R.id.categoriasListView));
         fabInserir = (FloatingActionButton) findViewById(R.id.fabInserir);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        subMenu = navigationView.getMenu().addSubMenu("Contas bancárias");
+        progressDialog = new ProgressDialog(this);
 
         listViewCategoria.setOnItemClickListener(onClickLista);
         listViewCategoria.setOnItemLongClickListener(onItemLongClickListenerCategoria);
         fabInserir.setOnClickListener(onClickListenerInserir);
         navigationView.setNavigationItemSelectedListener(onNavigationItemSelectedListener);
+        progressDialog.setCancelable(false);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -69,6 +80,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         new SearchBankAccountTask().execute();
+        new SearchUserTask().execute();
     }
 
     @Override
@@ -133,14 +145,80 @@ public class MainActivity extends AppCompatActivity
     private  View.OnClickListener onClickListenerInserir = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DialogMntCategory dialogInsertCategory = new DialogMntCategory(MainActivity.this, null);
+
+            final EditText descricaoEditText = new EditText(MainActivity.this);
+            DialogInterface.OnClickListener onClickListenerPositive = new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (descricaoEditText.getText().length() > 0) {
+                        EnumOperationBd operation;
+                        Categoria categoria = null;
+
+                        if (categoria != null) {
+                            operation = EnumOperationBd.update;
+                            categoria.setDescricao(descricaoEditText.getText().toString());
+                        } else {
+                            operation = EnumOperationBd.insert;
+                            categoria = new Categoria(descricaoEditText.getText().toString());
+                        }
+                        new OperationCategoryTask(MainActivity.this, (AlertDialog) dialog, operation).execute(categoria);
+
+                    } else {
+                        descricaoEditText.setError("Preencha a descrição.");
+                    }
+                }
+            };
+            descricaoEditText.setHint("Descrição da categoria");
+
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Nova categoria")
+                    .setPositiveButton("Ok", onClickListenerPositive)
+                    .setNegativeButton("Cancelar", null)
+                    .setView(descricaoEditText)
+                    .create().show();
+
+            /*final EditText editText = new EditText(MainActivity.this);
+
+            DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(MainActivity.this, editText.getText().toString(), Toast.LENGTH_LONG).show();
+                }
+            };
+
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Titulo")
+                    .setMessage("Mensagem")
+                    .setPositiveButton("PositiveBtn", onClickListener)
+                    .setNegativeButton("NegativrBtn", null)
+                    .setIcon(R.drawable.fab_plus_icon)
+                    .setView(editText)
+                    .create().show(); */
+
+
+
+            /*final DialogMntCategory dialogInsertCategory = new DialogMntCategory(MainActivity.this, null);
             dialogInsertCategory.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
+                    //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    //imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
                     new SearchCategoryTask(MainActivity.this, listViewCategoria, adapterListCategoria).execute();
                 }
             });
+
+            //dialogInsertCategory.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            //dialogInsertCategory.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            dialogInsertCategory.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(dialogInsertCategory.descricaoEditText, InputMethodManager.SHOW_IMPLICIT);
+                }
+            });
             dialogInsertCategory.show();
+            //dialogInsertCategory.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            */
         }
     };
     private AdapterView.OnItemClickListener onClickLista = new AdapterView.OnItemClickListener() {
@@ -182,7 +260,7 @@ public class MainActivity extends AppCompatActivity
                                                     .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
-                                                            new OperationCategoryTask(MainActivity.this, null, EnumOperation.delete).execute((Categoria) parent.getItemAtPosition(position));
+                                                            new OperationCategoryTask(MainActivity.this, null, EnumOperationBd.delete).execute((Categoria) parent.getItemAtPosition(position));
                                                         }
                                                     })
                                                     .create();
@@ -211,7 +289,9 @@ public class MainActivity extends AppCompatActivity
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
             if (item.getItemId() == 0) {
-                Toast.makeText(MainActivity.this, getBankAccount(item.getTitle().toString()).getName(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.this, ResumeBanckAccountActivity.class);
+                intent.putExtra("idBankAccount", getBankAccount(item.getTitle().toString()).getId());
+                startActivity(intent);
             } else {
                 if (item.getItemId() == R.id.nav_add_bank_account) {
                     Intent intent = new Intent(MainActivity.this, MntBankAccountActivity.class);
@@ -225,11 +305,6 @@ public class MainActivity extends AppCompatActivity
     };
 
     public class LogOutTask extends AsyncTask<Void, Void, Void> {
-        private ProgressDialog progressDialog;
-
-        public LogOutTask() {
-            progressDialog = new ProgressDialog(MainActivity.this);
-        }
 
         @Override
         protected void onPreExecute() {
@@ -258,6 +333,8 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog.setMessage("Buscando contas bancárias...");
+            progressDialog.show();
         }
 
         @Override
@@ -270,13 +347,13 @@ public class MainActivity extends AppCompatActivity
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            navigationView.getMenu().clear();
-            SubMenu subMenu = navigationView.getMenu().addSubMenu("Contas bancárias");
+            subMenu.clear();
 
             for (BankAccount bankAccount : listBankAccount) {
                 MenuItem menuItem = subMenu.add(bankAccount.getName());
                 menuItem.setIcon(R.drawable.ic_menu_send);
             }
+            progressDialog.dismiss();
         }
     }
 
@@ -286,6 +363,31 @@ public class MainActivity extends AppCompatActivity
                 return bankAccount;
         }
         return null;
+    }
+
+    public class SearchUserTask extends AsyncTask<Void, Void, User> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("Buscando dados pessoais...");
+            progressDialog.show();
+        }
+
+        @Override
+        protected User doInBackground(Void... params) {
+            return DbHelper.getInstance().getUserActive();
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            super.onPostExecute(user);
+
+            ((TextView) findViewById(R.id.userNameHeaderTextView)).setText(user.getLogin());
+            ((TextView) findViewById(R.id.emailUserHeaderTextView)).setText(user.getEmail());
+
+            progressDialog.dismiss();
+        }
     }
 
 }

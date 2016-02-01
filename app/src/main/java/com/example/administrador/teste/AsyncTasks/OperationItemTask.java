@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import com.example.administrador.teste.Modelo.Bo.ItemBo;
 import com.example.administrador.teste.Modelo.Bo.ModelException;
-import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperation;
+import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperationBd;
 import com.example.administrador.teste.Modelo.Vo.Item;
 
 /**
@@ -18,12 +18,12 @@ public class OperationItemTask extends AsyncTask<Item, Void, Void> {
     private ProgressDialog progressDialog;
     private String messageException;
     private Activity activity;
-    private EnumOperation operation;
+    private EnumOperationBd operation;
     private String messageProgress[] = {"Inserindo item...",
             "Atualizando item...",
             "Deletando item"};
 
-    public OperationItemTask(Activity activity, EnumOperation operation) {
+    public OperationItemTask(Activity activity, EnumOperationBd operation) {
         this.activity = activity;
         this.operation = operation;
 

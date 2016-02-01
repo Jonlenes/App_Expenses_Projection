@@ -87,11 +87,12 @@ public class ItemDao {
         return list;
     }
 
-    public Boolean contemPorDescricao(String descricao, String userLogin) {
+    public Boolean contemPorDescricao(Long id, String descricao, String userLogin) {
         String sql = "SELECT * FROM Item\n" +
                 "INNER JOIN BankAccount \n" +
                 "  ON BankAccount.id = Item.idBankAccount\n" +
-                "WHERE Item.descricao = '" + descricao + "'\n" +
+                "WHERE Item.id != " + id + "\n" +
+                "  AND Item.descricao = '" + descricao + "'\n" +
                 "  AND BankAccount.loginUser = '" + userLogin + "'";
         return  db.rawQuery(sql, null).moveToFirst();
     }

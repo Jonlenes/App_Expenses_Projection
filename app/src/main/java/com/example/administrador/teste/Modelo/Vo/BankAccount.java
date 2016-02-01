@@ -8,7 +8,9 @@ public class BankAccount {
     private  Long id;
     private String name;
     private String loginUser;
-    private Double saldo;
+    private Double saldoCorrente;
+    private Double saldoPoupanca;
+    private Double saldoProjetado;
 
     public BankAccount() {
     }
@@ -17,17 +19,28 @@ public class BankAccount {
         this.name = name;
     }
 
-    public BankAccount(String name, String loginUser, Double saldo) {
+    public BankAccount(String name, String loginUser, Double saldoCorrente, Double saldoPoupanca) {
         this.name = name;
         this.loginUser = loginUser;
-        this.saldo = saldo;
+        this.saldoCorrente = saldoCorrente;
+        this.saldoPoupanca = saldoPoupanca;
     }
 
-    public BankAccount(Long id, String name, String loginUser, Double saldo) {
+    public BankAccount(Long id, String name, String loginUser, Double saldoCorrente, Double saldoPoupanca) {
         this.id = id;
         this.name = name;
         this.loginUser = loginUser;
-        this.saldo = saldo;
+        this.saldoCorrente = saldoCorrente;
+        this.saldoPoupanca = saldoPoupanca;
+    }
+
+    public BankAccount(Long id, String name, String loginUser, Double saldoCorrente, Double saldoPoupanca, Double saldoProjetado) {
+        this.id = id;
+        this.name = name;
+        this.loginUser = loginUser;
+        this.saldoCorrente = saldoCorrente;
+        this.saldoPoupanca = saldoPoupanca;
+        this.saldoProjetado = saldoProjetado;
     }
 
     public Long getId() {
@@ -54,11 +67,27 @@ public class BankAccount {
         this.loginUser = loginUser;
     }
 
-    public Double getSaldo() {
-        return saldo;
+    public Double getSaldoCorrente() {
+        return saldoCorrente;
     }
 
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
+    public void setSaldoCorrente(Double saldoCorrente) {
+        this.saldoCorrente = saldoCorrente;
+    }
+
+    public Double getSaldoPoupanca() {
+        return saldoPoupanca;
+    }
+
+    public void setSaldoPoupanca(Double saldoPoupanca) {
+        this.saldoPoupanca = saldoPoupanca;
+    }
+
+    public Double getSaldoProjetado() {
+        return saldoProjetado;
+    }
+
+    public void setSaldoProjetado(Double saldoProjetado) {
+        this.saldoProjetado = saldoProjetado;
     }
 }
