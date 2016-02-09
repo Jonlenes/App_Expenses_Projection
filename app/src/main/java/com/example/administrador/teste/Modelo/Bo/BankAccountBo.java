@@ -20,7 +20,7 @@ public class BankAccountBo {
     }
 
     public void insert(BankAccount bankAccount) throws ModelException {
-        if (bankAccountDao.containByName(bankAccount.getName()))
+        if (bankAccountDao.containByName(-1l, bankAccount.getName(), DbHelper.getInstance().getUserActive().getLogin()))
             throw new ModelException("Já existe uma conta bancária com esse nome.");
 
         bankAccount.setLoginUser(DbHelper.getInstance().getUserActive().getLogin());
@@ -30,7 +30,10 @@ public class BankAccountBo {
         bankAccountDao.insert(bankAccount);
     }
 
-    public void update(BankAccount bankAccount) {
+    public void update(BankAccount bankAccount) throws ModelException {
+        if (bankAccountDao.containByName(bankAccount.getId(), bankAccount.getName(), DbHelper.getInstance().getUserActive().getLogin()))
+            throw new ModelException("Já existe uma conta bancária com esse nome.");
+
         bankAccountDao.update(bankAccount);
     }
 

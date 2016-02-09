@@ -34,6 +34,7 @@ public class ItemActivity extends AppCompatActivity {
         listView = ((ListView) findViewById(R.id.itensListView));
 
         listView.setOnItemLongClickListener(onItemLongClickListenerItem);
+        listView.setOnItemClickListener(onItemClickListener);
         findViewById(R.id.fabInserirItem).setOnClickListener(onClickListenerAddItem);
 
         if (idCategoria != -1) {
@@ -59,6 +60,15 @@ public class ItemActivity extends AppCompatActivity {
         }
     };
 
+    private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent intent = new Intent(ItemActivity.this, ResumeItemActivity.class);
+            intent.putExtra("id", ((Item) parent.getItemAtPosition(position)).getId());
+            startActivity(intent);
+        }
+    };
+
     private AdapterView.OnItemLongClickListener onItemLongClickListenerItem = new AdapterView.OnItemLongClickListener() {
         @Override
         public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
@@ -74,13 +84,7 @@ public class ItemActivity extends AppCompatActivity {
                                         case 0:
                                             Item item = (Item) parent.getItemAtPosition(position);
                                             Intent intent = new Intent(ItemActivity.this, MntItemActivity.class);
-
                                             intent.putExtra("id", item.getId());
-                                            intent.putExtra("idCategoria", item.getIdCategoria());
-                                            intent.putExtra("saldo", item.getSaldo());
-                                            intent.putExtra("descrisao", item.getDescricao());
-                                            intent.putExtra("valor", item.getValor());
-
                                             startActivity(intent);
 
                                             break;

@@ -76,9 +76,11 @@ public class BankAccountDao {
         return  db.rawQuery(sql, null).moveToNext();
     }
 
-    public Boolean containByName(String name) {
+    public Boolean containByName(Long id, String name, String loginUser) {
         String sql = "SELECT * FROM BankAccount\n" +
-                "WHERE name = '" + name + "'";
+                "WHERE name = '" + name + "'\n" +
+                "AND loginUser = '" + loginUser + "'\n" +
+                "AND id != " + id;
         return  db.rawQuery(sql, null).moveToNext();
     }
 

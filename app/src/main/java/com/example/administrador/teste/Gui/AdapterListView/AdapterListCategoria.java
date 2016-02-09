@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.example.administrador.teste.Modelo.Vo.Categoria;
 import com.example.administrador.teste.R;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -59,7 +60,7 @@ public class AdapterListCategoria extends BaseAdapter {
 
         Categoria categoria = arrayList.get(position);
         viewHolder.textViewDescricao.setText(categoria.getDescricao());
-        viewHolder.textViewSaldo.setText(String.valueOf(categoria.getSaldo()));
+        viewHolder.textViewSaldo.setText(NumberFormat.getCurrencyInstance().format(categoria.getSaldo()));
 
         return convertView;
     }

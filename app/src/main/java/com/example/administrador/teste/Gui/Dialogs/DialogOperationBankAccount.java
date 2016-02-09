@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrador.teste.AsyncTasks.SearchCategoryTask;
 import com.example.administrador.teste.Modelo.Bo.BankAccountBo;
 import com.example.administrador.teste.Modelo.Bo.ModelException;
 import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperationBankAccount;
@@ -32,12 +34,15 @@ public class DialogOperationBankAccount extends AlertDialog {
     private EnumOperationBankAccount operationBankAccount;
     private EnumTypeBankAccount typeBankAccount;
 
-    public DialogOperationBankAccount(Context context, Long idBankAccout, EnumOperationBankAccount operationBankAccount) {
+    String s;
+
+    public DialogOperationBankAccount(Context context, Long idBankAccout, EnumOperationBankAccount operationBankAccount, String s) {
         super(context);
 
         this.idBankAccout = idBankAccout;
         this.context = context;
         this.operationBankAccount = operationBankAccount;
+        this.s = s;
     }
 
     @Override
@@ -56,12 +61,10 @@ public class DialogOperationBankAccount extends AlertDialog {
             typeBankAccount = EnumTypeBankAccount.corrente;
         }
         valorDepositarEditText = (EditText) findViewById(R.id.valorDepositarEditText);
+        valorDepositarEditText.setText(s);
 
         findViewById(R.id.cancelDepositarButton).setOnClickListener(clickListenerCancel);
         findViewById(R.id.okDepositarButton).setOnClickListener(clickListenerOk);
-
-        /*getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);*/
 
     }
 

@@ -1,11 +1,15 @@
 package com.example.administrador.teste.Gui.Activities;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,29 +25,32 @@ import com.example.administrador.teste.Modelo.Bo.ModelException;
 import com.example.administrador.teste.Modelo.Vo.BankAccount;
 import com.example.administrador.teste.Modelo.Vo.Enum.EnumOperationBankAccount;
 import com.example.administrador.teste.R;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.text.NumberFormat;
 import java.util.Map;
 
-public class ResumeBanckAccountActivity extends Activity {
+public class ResumeBankAccountActivity extends AppCompatActivity {
     private Long idBankAccount;
     private BankAccount bankAccount;
     private Map<String, Double> mapPercent;
 
-    //private RelativeLayout graphDistribuitionRelativeLayout;
-    //private PieChart pieChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_resume_banck_account);
+        setContentView(R.layout.activity_resume_bank_account);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         idBankAccount = getIntent().getLongExtra("idBankAccount", -1);
-        ((Button) findViewById(R.id.projetarButton)).setOnClickListener(onClickListenerProjetar);
+        findViewById(R.id.projetarButton).setOnClickListener(onClickListenerProjetar);
 
         new BankAccountTask().execute();
-
-        /*graphDistribuitionRelativeLayout = (RelativeLayout) findViewById(R.id.graphDistribuitionRelativeLayout);
+        
+         /*graphDistribuitionRelativeLayout = (RelativeLayout) findViewById(R.id.graphDistribuitionRelativeLayout);
         pieChart = new PieChart(this);
 
         graphDistribuitionRelativeLayout.addView(pieChart);
@@ -63,7 +70,7 @@ public class ResumeBanckAccountActivity extends Activity {
             public void onValueSelected(Entry entry, int i, Highlight highlight) {
                 if (entry == null) return;
 
-                Toast.makeText(ResumeBanckAccountActivity.this, mapPercent.entrySet().toArray()[entry.getXIndex()].toString() + " = " + entry.getVal() + "%", Toast.LENGTH_LONG).show();
+                Toast.makeText(ResumeBankAccountActivity.this, mapPercent.entrySet().toArray()[entry.getXIndex()].toString() + " = " + entry.getVal() + "%", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -96,7 +103,8 @@ public class ResumeBanckAccountActivity extends Activity {
 
         switch (id) {
             case R.id.action_depositar_bank_account:
-                operationBankAccount(EnumOperationBankAccount.depositar);;
+                operationBankAccount(EnumOperationBankAccount.depositar);
+                ;
                 break;
             case R.id.action_sacar_bank_account:
                 operationBankAccount(EnumOperationBankAccount.sacar);
@@ -110,23 +118,38 @@ public class ResumeBanckAccountActivity extends Activity {
         @Override
         public void onClick(View v) {
             Double percentual = Double.parseDouble(((EditText) findViewById(R.id.percentualProjetionEditText)).getText().toString());
-            if (percentual <= 0 || percentual > 100) Toast.makeText(ResumeBanckAccountActivity.this, "Percentual inválido", Toast.LENGTH_LONG).show();
+            if (percentual <= 0 || percentual > 100)
+                Toast.makeText(ResumeBankAccountActivity.this, "Percentual inválido", Toast.LENGTH_LONG).show();
             else
                 new PorjetarTask().execute(percentual / 100.0);
         }
     };
 
-    private void operationBankAccount(EnumOperationBankAccount operationBankAccount) {
-        DialogOperationBankAccount dialogOperationBankAccount =
-                new DialogOperationBankAccount(ResumeBanckAccountActivity.this, idBankAccount, operationBankAccount);
-        dialogOperationBankAccount.show();
-        dialogOperationBankAccount.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                new BankAccountTask().execute();
-            }
-        });
+    private void operationBankAccount(final EnumOperationBankAccount operationBankAccount) {
+        final EditText descricaoEditText = new EditText(ResumeBankAccountActivity.this);
+        descricaoEditText.setHint("Valor");
 
+        DialogInterface.OnClickListener onClickListenerPositive = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DialogOperationBankAccount dialogOperationBankAccount =
+                        new DialogOperationBankAccount(ResumeBankAccountActivity.this, idBankAccount, operationBankAccount, descricaoEditText.getText().toString());
+                dialogOperationBankAccount.show();
+                dialogOperationBankAccount.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        new BankAccountTask().execute();
+                    }
+                });
+            }
+        };
+
+        new AlertDialog.Builder(ResumeBankAccountActivity.this)
+                .setTitle("Digite o valor")
+                .setPositiveButton("Ok", onClickListenerPositive)
+                .setNegativeButton("Cancelar", null)
+                .setView(descricaoEditText)
+                .create().show();
     }
 
     public class BankAccountTask extends AsyncTask<Void, Void, Void> {
@@ -136,7 +159,7 @@ public class ResumeBanckAccountActivity extends Activity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(ResumeBanckAccountActivity.this);
+            progressDialog = new ProgressDialog(ResumeBankAccountActivity.this);
             progressDialog.setCancelable(false);
             progressDialog.setMessage("Buscando dados...");
         }
@@ -155,19 +178,24 @@ public class ResumeBanckAccountActivity extends Activity {
             if (bankAccount != null) {
                 NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
 
-                ((TextView) findViewById(R.id.nameBankAccountTextView)).setText(bankAccount.getName());
+                try {
+                    ResumeBankAccountActivity.this.getSupportActionBar().setTitle(bankAccount.getName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 ((TextView) findViewById(R.id.saldoCorrenteDisponivelTextView)).setText(
                         numberFormat.format(bankAccount.getSaldoCorrente() - bankAccount.getSaldoProjetado()));
                 ((TextView) findViewById(R.id.saldoCorrenteTextView)).setText(numberFormat.format(bankAccount.getSaldoCorrente()));
                 ((TextView) findViewById(R.id.saldoPoupancaTextView)).setText(numberFormat.format(bankAccount.getSaldoPoupanca()));
                 ((TextView) findViewById(R.id.saldoProjetadoTextView)).setText(numberFormat.format(bankAccount.getSaldoProjetado()));
 
-                String s = "";
-                for (Map.Entry<String, Double> entry : mapPercent.entrySet()) {
-                    s += entry.getKey() + "\t" + NumberFormat.getPercentInstance().format((int)(100 * entry.getValue()) / bankAccount.getSaldoProjetado()) + "\n";
+                if (bankAccount.getSaldoProjetado() > 0) {
+                    String s = "";
+                    for (Map.Entry<String, Double> entry : mapPercent.entrySet()) {
+                        s += entry.getKey() + "\t" + NumberFormat.getPercentInstance().format(entry.getValue() / bankAccount.getSaldoProjetado()) + "\n";
+                    }
+                    ((TextView) findViewById(R.id.percentTextView)).setText(s);
                 }
-                ((TextView) findViewById(R.id.percentTextView)).setText(s);
-
                 /*ArrayList<Entry> yValues  = new ArrayList<Entry>();
                 ArrayList<String> xValues  = new ArrayList<String>();
                 int i = 0;
@@ -201,7 +229,7 @@ public class ResumeBanckAccountActivity extends Activity {
 
 
             } else {
-                Toast.makeText(ResumeBanckAccountActivity.this, "Erro", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ResumeBankAccountActivity.this, "Erro", Toast.LENGTH_SHORT).show();
                 finish();
             }
             progressDialog.dismiss();
@@ -216,7 +244,7 @@ public class ResumeBanckAccountActivity extends Activity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(ResumeBanckAccountActivity.this);
+            progressDialog = new ProgressDialog(ResumeBankAccountActivity.this);
             progressDialog.setCancelable(false);
             progressDialog.setMessage("Projetando...");
         }
@@ -238,12 +266,11 @@ public class ResumeBanckAccountActivity extends Activity {
 
             progressDialog.dismiss();
             if (messageException != null) {
-                Toast.makeText(ResumeBanckAccountActivity.this, messageException, Toast.LENGTH_LONG).show();
+                Toast.makeText(ResumeBankAccountActivity.this, messageException, Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(ResumeBanckAccountActivity.this, "Projeção realizada com sucesso.", Toast.LENGTH_LONG).show();
+                Toast.makeText(ResumeBankAccountActivity.this, "Projeção realizada com sucesso.", Toast.LENGTH_LONG).show();
             }
             new BankAccountTask().execute();
         }
     }
-
 }

@@ -170,12 +170,19 @@ public class MainActivity extends AppCompatActivity
             };
             descricaoEditText.setHint("Descrição da categoria");
 
-            new AlertDialog.Builder(MainActivity.this)
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Nova categoria")
                     .setPositiveButton("Ok", onClickListenerPositive)
                     .setNegativeButton("Cancelar", null)
                     .setView(descricaoEditText)
-                    .create().show();
+                    .create();
+            alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    new SearchCategoryTask(MainActivity.this, listViewCategoria, adapterListCategoria).execute();
+                }
+            });
+            alertDialog.show();
 
             /*final EditText editText = new EditText(MainActivity.this);
 
@@ -289,7 +296,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
             if (item.getItemId() == 0) {
-                Intent intent = new Intent(MainActivity.this, ResumeBanckAccountActivity.class);
+                Intent intent = new Intent(MainActivity.this, ResumeBankAccountActivity.class);
                 intent.putExtra("idBankAccount", getBankAccount(item.getTitle().toString()).getId());
                 startActivity(intent);
             } else {

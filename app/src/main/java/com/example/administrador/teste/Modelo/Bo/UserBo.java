@@ -15,6 +15,8 @@ public class UserBo {
     }
 
     public void insert(User user) throws ModelException {
+        user.setLogin(user.getLogin().toLowerCase());
+
         if (userDao.containByLogin(user.getLogin())) {
             throw new ModelException("Nome de usuário indisponivel");
         }
@@ -28,7 +30,7 @@ public class UserBo {
     }
 
     public void login(String login, String password, Boolean isConnected) throws ModelException {
-        if (!userDao.login(login, password))
+        if (!userDao.login(login.toLowerCase(), password))
             throw new ModelException("Usuário ou senha incorretos");
 
         User user = userDao.getUser(login);

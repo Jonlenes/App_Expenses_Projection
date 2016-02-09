@@ -1,5 +1,7 @@
 package com.example.administrador.teste.Modelo.Bo;
 
+import android.graphics.AvoidXfermode;
+
 import com.example.administrador.teste.Modelo.Dao.BankAccountDao;
 import com.example.administrador.teste.Modelo.Dao.ItemDao;
 import com.example.administrador.teste.Modelo.Vo.BankAccount;
@@ -25,7 +27,9 @@ public class ItemBo {
         List<BankAccount> accounts =  new BankAccountBo().getBankAccountUser();
         //Pegar apenas a primeira conta é temporário
 
-        //verificar saldo da conta
+        BankAccount bankAccount = new BankAccountBo().getBankAccount(accounts.get(0).getId());
+        if ((bankAccount.getSaldoCorrente() - bankAccount.getSaldoProjetado()) < item.getSaldo())
+            throw new ModelException("Saldo insuficiente.");
 
         item.setIdBankAccount(accounts.get(0).getId());
         itemDao.insere(item);
@@ -59,6 +63,25 @@ public class ItemBo {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void lancarDespesa(Item item, Double valor) throws ModelException {
+        if (item.getSaldo() < valor)
+            throw new ModelException("Saldo insuficiente.");
+
+        item.setSaldo(item.getSaldo() - valor);
+        BankAccountBo bankAccountBo = new BankAccountBo();
+        BankAccount bankAccount = bankAccountBo.getBankAccountUser().get(0);
+        bankAccount.setSaldoCorrente(bankAccount.getSaldoCorrente() - valor);
+        bankAccountBo.update(bankAccount);
+
+        itemDao.altera(item);
+
+
+    }
+
+    public Item getItem(Long id) {
+        return itemDao.getItem(id);
     }
 	
 	/*public void transferirSaldo(Item itemSaida, Item itemEntrada, Double valor) throws ModelException {

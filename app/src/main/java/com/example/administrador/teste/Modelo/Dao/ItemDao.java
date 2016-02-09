@@ -44,7 +44,7 @@ public class ItemDao {
         contentValues.put("descricao", item.getDescricao());
         contentValues.put("valor", item.getValor());
         contentValues.put("saldo", item.getSaldo());
-        //contentValues.put("idBankAccount", item.getIdBankAccount());
+        contentValues.put("idBankAccount", item.getIdBankAccount());
 
         db.update("Item", contentValues, "id = " + item.getId(), null);
     }
@@ -95,5 +95,22 @@ public class ItemDao {
                 "  AND Item.descricao = '" + descricao + "'\n" +
                 "  AND BankAccount.loginUser = '" + userLogin + "'";
         return  db.rawQuery(sql, null).moveToFirst();
+    }
+
+    public Item getItem(Long id){
+        String sql = "SELECT * FROM Item \n" +
+                "WHERE id = " + id;
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if (cursor.moveToNext()) {
+            return new Item(cursor.getLong(0),
+                    cursor.getLong(1),
+                    cursor.getString(2),
+                    cursor.getDouble(3),
+                    cursor.getDouble(4),
+                    cursor.getLong(5));
+        }
+
+        return null;
     }
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.example.administrador.teste.Modelo.Vo.Item;
 import com.example.administrador.teste.R;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -47,7 +48,7 @@ public class AdapterListItem extends BaseAdapter {
             Item item = arrayList.get(position);
 
             ((TextView) convertView.findViewById(R.id.descricaoItemTextView)).setText(item.getDescricao());
-            ((TextView) convertView.findViewById(R.id.saldoItemTextView)).setText(String.valueOf(item.getSaldo()));
+            ((TextView) convertView.findViewById(R.id.saldoItemTextView)).setText(NumberFormat.getCurrencyInstance().format(item.getSaldo()));
         }
         return convertView;
     }

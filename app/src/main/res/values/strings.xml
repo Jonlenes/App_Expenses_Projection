@@ -49,5 +49,9 @@
         <item>Corrente</item>
         <item>Poupança</item>
     </string-array>
+    <string name="title_activity_resume_item">ResumeItemActivity</string>
+
+    <string name="action_lancar_gastos">Lançar gastos</string>
+    <string name="title_activity_resume_bank_account">ResumeBankAccountActivity</string>
 
 </resources>
